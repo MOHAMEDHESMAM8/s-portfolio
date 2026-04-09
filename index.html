@@ -4,8 +4,29 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Sara Mahrous | Photographer & Media Creator</title>
+  <meta name="description" content="Sara Mahrous — Alexandria-based photographer and UGC creator. Fashion editorials, branded content, event films, and wedding coverage. Explore the portfolio and book a project." />
+  <meta name="author" content="Sara Mahrous" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta name="theme-color" content="#0c0a08" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="keywords" content="Sara Mahrous, photographer, UGC creator, fashion photography, Alexandria, Egypt, event coverage, wedding films, branded content, media coverage" />
+  <meta property="og:title" content="Sara Mahrous | Photographer &amp; Media Creator" />
+  <meta property="og:description" content="Sara Mahrous — Alexandria-based photographer and UGC creator. Fashion editorials, branded content, event films, and wedding coverage. Explore the portfolio and book a project." />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:site_name" content="Sara Mahrous" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Sara Mahrous | Photographer &amp; Media Creator" />
+  <meta name="twitter:description" content="Sara Mahrous — Alexandria-based photographer and UGC creator. Fashion editorials, branded content, event films, and wedding coverage." />
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Person","name":"Sara Mahrous","jobTitle":"Photographer and UGC creator","description":"Fashion photography, branded content, event films, and wedding coverage. Based in Alexandria, Egypt.","sameAs":["https://www.instagram.com/sara_media_coverage/"]}
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="dns-prefetch" href="https://drive.google.com" />
+  <link rel="dns-prefetch" href="https://docs.google.com" />
+  <link rel="preconnect" href="https://drive.google.com" crossorigin />
   <link rel="preload" as="image" href="fashion/IMG_2085.webp" fetchpriority="high" />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
   <style>
@@ -66,6 +87,8 @@
       scroll-behavior: smooth;
       overflow-x: clip;
       max-width: 100%;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
@@ -90,6 +113,7 @@
       line-height: var(--leading-body);
       font-optical-sizing: auto;
       -webkit-font-smoothing: antialiased;
+      overflow-wrap: break-word;
     }
     body.lightbox-open .bottom-nav {
       opacity: 0;
@@ -101,6 +125,49 @@
     button:focus-visible {
       outline: 2px solid var(--gold);
       outline-offset: 3px;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+      z-index: 10001;
+      padding: 0.65rem 1.1rem;
+      background: var(--bg3);
+      color: var(--text);
+      border: 1px solid var(--border);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 2px;
+    }
+    .skip-link:focus {
+      left: max(1rem, env(safe-area-inset-left));
+      top: max(1rem, env(safe-area-inset-top));
+      outline: 2px solid var(--gold);
+      outline-offset: 3px;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    #main:focus {
+      outline: none;
+    }
+    #main:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 0.25rem;
     }
 
     /* ── NAV ── */
@@ -226,16 +293,16 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 0.2rem;
-      min-height: 52px;
+      gap: 0.28rem;
+      min-height: 54px;
       max-width: 120px;
       margin: 0 auto;
-      padding: 0.35rem 0.2rem;
+      padding: 0.4rem 0.25rem;
       text-decoration: none;
       color: var(--text-muted);
-      font-size: 0.625rem;
+      font-size: 0.6875rem;
       font-weight: 600;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
       transition: color 0.2s var(--ease-out-expo), background 0.2s var(--ease-out-expo);
     }
@@ -443,6 +510,7 @@
       background: var(--bg2);
       padding-top: clamp(5.25rem, 11vw, 8.75rem);
       padding-bottom: var(--space-section-y);
+      overflow-x: clip;
     }
     #fashion {
       padding-top: clamp(4rem, 8.5vw, 6.75rem);
@@ -520,6 +588,7 @@
     }
     .about-img-wrap {
       position: relative;
+      overflow: visible;
     }
     .about-img-wrap::before {
       content: '';
@@ -623,6 +692,18 @@
       cursor: pointer;
       position: relative;
     }
+    button.photo-item {
+      appearance: none;
+      border: none;
+      background: transparent;
+      padding: 0;
+      font: inherit;
+      color: inherit;
+      width: 100%;
+      display: block;
+      text-align: inherit;
+      -webkit-tap-highlight-color: transparent;
+    }
     .photo-item img {
       width: 100%;
       display: block;
@@ -673,6 +754,7 @@
       aspect-ratio: 9/16;
       display: block;
       border: none;
+      background: var(--bg3);
     }
     .video-card-label {
       padding: var(--space-sm) var(--space-md);
@@ -712,6 +794,7 @@
       aspect-ratio: 16/9;
       display: block;
       border: none;
+      background: var(--bg3);
     }
     .event-card-info {
       padding: var(--space-md) var(--space-lg);
@@ -833,7 +916,9 @@
       background: none;
       border: none;
       cursor: pointer;
-      padding: 0.4rem 0.6rem;
+      min-height: 44px;
+      min-width: 44px;
+      padding: 0.5rem 0.75rem;
       -webkit-tap-highlight-color: transparent;
       transition: color 0.3s var(--ease-out-expo);
     }
@@ -915,7 +1000,12 @@
       font-size: 0.72rem;
       letter-spacing: 0.1em;
       transition: color 0.3s;
-      padding: 0.5rem 0;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem 0.75rem;
+      margin: -0.25rem;
       -webkit-tap-highlight-color: transparent;
     }
     @media (hover: hover) and (pointer: fine) {
@@ -1002,12 +1092,18 @@
     /* ── RESPONSIVE ── */
     @media (max-width: 1024px) {
       .photo-grid { columns: 2; }
-      .video-grid { grid-template-columns: repeat(2, 1fr); }
       .stats-strip { gap: var(--space-lg) var(--space-xl); }
+    }
+    /* UGC: single column on narrow tablets / large phones — two Drive embeds side-by-side get too cramped */
+    @media (max-width: 1024px) and (min-width: 901px) {
+      .video-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 900px) {
+      .video-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 768px) {
       body {
-        padding-bottom: calc(52px + env(safe-area-inset-bottom, 0px));
+        padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
       }
       .bottom-nav {
         display: flex;
@@ -1015,15 +1111,25 @@
       nav {
         justify-content: center;
       }
+      .nav-logo {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        padding-block: 0.2rem;
+      }
       .nav-links {
         display: none !important;
       }
       .hero-scroll {
-        bottom: calc(0.65rem + 52px + env(safe-area-inset-bottom, 0px));
+        bottom: calc(0.65rem + 56px + env(safe-area-inset-bottom, 0px));
       }
       section {
         padding-left: max(1.5rem, env(safe-area-inset-left));
         padding-right: max(1.5rem, env(safe-area-inset-right));
+      }
+      #about {
+        padding-left: max(1.75rem, calc(env(safe-area-inset-left) + 0.25rem));
+        padding-right: max(1.75rem, calc(env(safe-area-inset-right) + 0.25rem));
       }
       #about, #fashion, #ugc, #events, #contact {
         padding-top: var(--space-section-y-mobile);
@@ -1039,7 +1145,6 @@
       .about-grid { grid-template-columns: 1fr; gap: 3rem; }
       .about-img-wrap { max-width: min(380px, 100%); margin: 0 auto; }
       .photo-grid { columns: 2; }
-      .video-grid { grid-template-columns: 1fr; }
       .events-grid { grid-template-columns: 1fr; }
       footer {
         flex-direction: column;
@@ -1075,6 +1180,35 @@
       }
       .hero-cta .contact-link { justify-content: center; }
     }
+    /* Very narrow phones: keep hero line from overflowing */
+    @media (max-width: 380px) {
+      .hero-tag {
+        letter-spacing: 0.22em;
+        padding: 0.45rem 1.1rem;
+        max-width: calc(100vw - 2.5rem);
+      }
+      .hero-sub {
+        letter-spacing: 0.16em;
+        font-size: 0.75rem;
+        padding-inline: 0.25rem;
+      }
+    }
+    /* Touch / stylus: slightly larger hit areas without changing desktop density */
+    @media (pointer: coarse) {
+      .btn {
+        min-height: 48px;
+        padding-top: 0.95rem;
+        padding-bottom: 0.95rem;
+      }
+      .contact-link {
+        min-height: 48px;
+        padding-top: 0.85rem;
+        padding-bottom: 0.85rem;
+      }
+      .gallery-cta .btn {
+        min-height: 48px;
+      }
+    }
     /* Phone landscape: hero must not force excessive empty space */
     @media (max-height: 520px) and (orientation: landscape) {
       #hero {
@@ -1083,14 +1217,18 @@
         padding-bottom: max(2rem, env(safe-area-inset-bottom));
       }
       .hero-name { font-size: clamp(2rem, 10vw, 4rem); }
+      .hero-content { gap: var(--space-md); }
+      .hero-cta { gap: var(--space-sm); margin-top: 0; }
+      .hero-tag { font-size: 0.65rem; letter-spacing: 0.2em; padding: 0.4rem 1.2rem; }
       .hero-scroll { display: none; }
     }
   </style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to main content</a>
 
 <!-- NAV -->
-<nav id="nav">
+<nav id="nav" aria-label="Primary">
   <a href="#hero" class="nav-logo">Sara <span>Mahrous</span></a>
   <ul class="nav-links" id="nav-menu">
     <li><a href="#about">About</a></li>
@@ -1101,6 +1239,7 @@
   </ul>
 </nav>
 
+<main id="main" tabindex="-1">
 <!-- HERO -->
 <section id="hero">
   <div class="hero-bg"></div>
@@ -1145,7 +1284,7 @@
       <div class="section-tag">About Me</div>
       <h2>Capturing <em>Stories</em><br>Through the Lens</h2>
       <p>
-        I'm Sara Mahrous — a Alexandria-based photographer, UGC creator, and media coverage specialist
+        I'm Sara Mahrous — an Alexandria-based photographer, UGC creator, and media coverage specialist
         with a passion for turning moments into timeless visual stories.
       </p>
       <p>
@@ -1169,7 +1308,8 @@
 </section>
 
 <!-- STATS -->
-<div id="stats">
+<section id="stats" aria-labelledby="stats-heading">
+  <h2 id="stats-heading" class="visually-hidden">Portfolio highlights</h2>
   <div class="stats-strip">
     <div class="stat-block fade-up">
       <div class="stat-num">100+</div>
@@ -1188,7 +1328,7 @@
       <div class="stat-label">Passion</div>
     </div>
   </div>
-</div>
+</section>
 
 <!-- FASHION PHOTOGRAPHY -->
 <section id="fashion">
@@ -1198,42 +1338,42 @@
     <div class="section-divider"></div>
   </div>
   <div class="photo-grid" id="photoGrid">
-    <div class="photo-item fade-up" onclick="openLightbox(0)">
-      <img src="fashion/IMG_1971.webp" alt="Fashion shoot" loading="lazy" decoding="async" />
-      <div class="photo-overlay"></div>
-    </div>
-    <div class="photo-item fade-up" onclick="openLightbox(1)">
-      <img src="fashion/IMG_1982.webp" alt="Fashion shoot" loading="lazy" decoding="async" />
-      <div class="photo-overlay"></div>
-    </div>
-    <div class="photo-item fade-up" onclick="openLightbox(2)">
-      <img src="fashion/IMG_1995.webp" alt="Fashion shoot" loading="lazy" decoding="async" />
-      <div class="photo-overlay"></div>
-    </div>
-    <div class="photo-item fade-up" onclick="openLightbox(3)">
-      <img src="fashion/IMG_2047.webp" alt="Fashion shoot" loading="lazy" decoding="async" />
-      <div class="photo-overlay"></div>
-    </div>
-    <div class="photo-item fade-up" onclick="openLightbox(4)">
-      <img src="fashion/IMG_2085.webp" alt="Fashion shoot" loading="lazy" decoding="async" />
-      <div class="photo-overlay"></div>
-    </div>
-    <div class="photo-item fade-up" onclick="openLightbox(5)">
-      <img src="fashion/IMG_2221.webp" alt="Fashion shoot" loading="lazy" decoding="async" />
-      <div class="photo-overlay"></div>
-    </div>
-    <div class="photo-item fade-up" onclick="openLightbox(6)">
-      <img src="fashion/IMG_2315.webp" alt="Fashion shoot" loading="lazy" decoding="async" />
-      <div class="photo-overlay"></div>
-    </div>
-    <div class="photo-item fade-up" onclick="openLightbox(7)">
-      <img src="fashion/IMG_2388.webp" alt="Fashion shoot" loading="lazy" decoding="async" />
-      <div class="photo-overlay"></div>
-    </div>
-    <div class="photo-item fade-up" onclick="openLightbox(8)">
-      <img src="fashion/IMG_2336.webp" alt="Fashion shoot" loading="lazy" decoding="async" />
-      <div class="photo-overlay"></div>
-    </div>
+    <button type="button" class="photo-item fade-up" data-lightbox-index="0" aria-label="Open fashion photo 1 of 9 in fullscreen viewer">
+      <img fetchpriority="low" src="fashion/IMG_1971.webp" alt="Editorial portrait: warm side light and tailored styling" loading="lazy" decoding="async" />
+      <div class="photo-overlay" aria-hidden="true"></div>
+    </button>
+    <button type="button" class="photo-item fade-up" data-lightbox-index="1" aria-label="Open fashion photo 2 of 9 in fullscreen viewer">
+      <img fetchpriority="low" src="fashion/IMG_1982.webp" alt="Full-length look on a clean studio floor, strong posture" loading="lazy" decoding="async" />
+      <div class="photo-overlay" aria-hidden="true"></div>
+    </button>
+    <button type="button" class="photo-item fade-up" data-lightbox-index="2" aria-label="Open fashion photo 3 of 9 in fullscreen viewer">
+      <img fetchpriority="low" src="fashion/IMG_1995.webp" alt="High-contrast editorial with bold color and shape" loading="lazy" decoding="async" />
+      <div class="photo-overlay" aria-hidden="true"></div>
+    </button>
+    <button type="button" class="photo-item fade-up" data-lightbox-index="3" aria-label="Open fashion photo 4 of 9 in fullscreen viewer">
+      <img fetchpriority="low" src="fashion/IMG_2047.webp" alt="Minimal set: strong silhouette on a neutral backdrop" loading="lazy" decoding="async" />
+      <div class="photo-overlay" aria-hidden="true"></div>
+    </button>
+    <button type="button" class="photo-item fade-up" data-lightbox-index="4" aria-label="Open fashion photo 5 of 9 in fullscreen viewer">
+      <img fetchpriority="low" src="fashion/IMG_2085.webp" alt="Campaign-style hero frame with dramatic rim light" loading="lazy" decoding="async" />
+      <div class="photo-overlay" aria-hidden="true"></div>
+    </button>
+    <button type="button" class="photo-item fade-up" data-lightbox-index="5" aria-label="Open fashion photo 6 of 9 in fullscreen viewer">
+      <img fetchpriority="low" src="fashion/IMG_2221.webp" alt="Detail study: fabric texture, styling, and tone" loading="lazy" decoding="async" />
+      <div class="photo-overlay" aria-hidden="true"></div>
+    </button>
+    <button type="button" class="photo-item fade-up" data-lightbox-index="6" aria-label="Open fashion photo 7 of 9 in fullscreen viewer">
+      <img fetchpriority="low" src="fashion/IMG_2315.webp" alt="Natural daylight fashion frame, outdoor or window light" loading="lazy" decoding="async" />
+      <div class="photo-overlay" aria-hidden="true"></div>
+    </button>
+    <button type="button" class="photo-item fade-up" data-lightbox-index="7" aria-label="Open fashion photo 8 of 9 in fullscreen viewer">
+      <img fetchpriority="low" src="fashion/IMG_2388.webp" alt="Magazine-style composition with asymmetrical framing" loading="lazy" decoding="async" />
+      <div class="photo-overlay" aria-hidden="true"></div>
+    </button>
+    <button type="button" class="photo-item fade-up" data-lightbox-index="8" aria-label="Open fashion photo 9 of 9 in fullscreen viewer">
+      <img fetchpriority="low" src="fashion/IMG_2336.webp" alt="Portrait: soft expression, calm balance, shallow depth" loading="lazy" decoding="async" />
+      <div class="photo-overlay" aria-hidden="true"></div>
+    </button>
   </div>
   <div class="gallery-cta fade-up">
     <a href="https://drive.google.com/drive/folders/1WxM95s49GfO3aALE9_6VWDm2B3clqbYn" target="_blank" rel="noopener" class="btn btn-outline">
@@ -1256,27 +1396,27 @@
   </p>
   <div class="video-grid">
     <div class="video-card fade-up">
-      <iframe title="UGC brand video" src="https://drive.google.com/file/d/10auOMtz-CL9XlZCL2xQZ2LJ1S3zx46Ss/preview" loading="lazy" allow="autoplay" allowfullscreen></iframe>
+      <iframe class="drive-embed" title="UGC brand video" data-src="https://drive.google.com/file/d/10auOMtz-CL9XlZCL2xQZ2LJ1S3zx46Ss/preview" allow="autoplay; fullscreen" allowfullscreen></iframe>
       <div class="video-card-label">UGC · Brand Video</div>
     </div>
     <div class="video-card fade-up">
-      <iframe title="UGC video" loading="lazy" src="https://drive.google.com/file/d/1Kvb9lXd6aKgqCQQJqJqLI4qCwWqpYI2f/preview" allow="autoplay" allowfullscreen></iframe>
+      <iframe class="drive-embed" title="UGC video" data-src="https://drive.google.com/file/d/1Kvb9lXd6aKgqCQQJqJqLI4qCwWqpYI2f/preview" allow="autoplay; fullscreen" allowfullscreen></iframe>
       <div class="video-card-label">UGC · Product Showcase</div>
     </div>
     <div class="video-card fade-up">
-      <iframe title="UGC video" loading="lazy" src="https://drive.google.com/file/d/1yCietX3a9xXgEWJDA6rCnunXuOQWZXnD/preview" allow="autoplay" allowfullscreen></iframe>
+      <iframe class="drive-embed" title="UGC video" data-src="https://drive.google.com/file/d/1yCietX3a9xXgEWJDA6rCnunXuOQWZXnD/preview" allow="autoplay; fullscreen" allowfullscreen></iframe>
       <div class="video-card-label">UGC · Lifestyle Reel</div>
     </div>
     <div class="video-card fade-up">
-      <iframe title="UGC video" loading="lazy" src="https://drive.google.com/file/d/1azDgK1PfLaGK1BaYzDgdun45CovNgO-V/preview" allow="autoplay" allowfullscreen></iframe>
+      <iframe class="drive-embed" title="UGC video" data-src="https://drive.google.com/file/d/1azDgK1PfLaGK1BaYzDgdun45CovNgO-V/preview" allow="autoplay; fullscreen" allowfullscreen></iframe>
       <div class="video-card-label">UGC · Brand Video</div>
     </div>
     <div class="video-card fade-up">
-      <iframe title="UGC video" loading="lazy" src="https://drive.google.com/file/d/1XQ5xFLbIn_a7d5KeHbwrB5s37XTHGaag/preview" allow="autoplay" allowfullscreen></iframe>
+      <iframe class="drive-embed" title="UGC video" data-src="https://drive.google.com/file/d/1XQ5xFLbIn_a7d5KeHbwrB5s37XTHGaag/preview" allow="autoplay; fullscreen" allowfullscreen></iframe>
       <div class="video-card-label">UGC · Content Reel</div>
     </div>
     <div class="video-card fade-up">
-      <iframe title="UGC video" loading="lazy" src="https://drive.google.com/file/d/1eD65dnYmljaN-dcbA2FOxzT1WDZsYXsv/preview" allow="autoplay" allowfullscreen></iframe>
+      <iframe class="drive-embed" title="UGC video" data-src="https://drive.google.com/file/d/1eD65dnYmljaN-dcbA2FOxzT1WDZsYXsv/preview" allow="autoplay; fullscreen" allowfullscreen></iframe>
       <div class="video-card-label">UGC · Lifestyle</div>
     </div>
   </div>
@@ -1301,28 +1441,28 @@
   </p>
   <div class="events-grid">
     <div class="event-card fade-up">
-      <iframe title="Event film" loading="lazy" src="https://drive.google.com/file/d/12vISkc6za1EbO3ojG5gVNx59d0WZE172/preview" allow="autoplay" allowfullscreen></iframe>
+      <iframe class="drive-embed" title="Event film" data-src="https://drive.google.com/file/d/12vISkc6za1EbO3ojG5gVNx59d0WZE172/preview" allow="autoplay; fullscreen" allowfullscreen></iframe>
       <div class="event-card-info">
         <div class="event-dot"></div>
         <span class="event-label">Event Reel</span>
       </div>
     </div>
     <div class="event-card fade-up">
-      <iframe title="Event film" loading="lazy" src="https://drive.google.com/file/d/1Wpwd_alhDbz8sXgaG5LPZJMFmavTSier/preview" allow="autoplay" allowfullscreen></iframe>
+      <iframe class="drive-embed" title="Event film" data-src="https://drive.google.com/file/d/1Wpwd_alhDbz8sXgaG5LPZJMFmavTSier/preview" allow="autoplay; fullscreen" allowfullscreen></iframe>
       <div class="event-card-info">
         <div class="event-dot"></div>
         <span class="event-label">Event Reel</span>
       </div>
     </div>
     <div class="event-card fade-up">
-      <iframe title="Event film" loading="lazy" src="https://drive.google.com/file/d/13TdtLcvx5FuxiD6PJCfQWdzY4o_N8LgX/preview" allow="autoplay" allowfullscreen></iframe>
+      <iframe class="drive-embed" title="Event film" data-src="https://drive.google.com/file/d/13TdtLcvx5FuxiD6PJCfQWdzY4o_N8LgX/preview" allow="autoplay; fullscreen" allowfullscreen></iframe>
       <div class="event-card-info">
         <div class="event-dot"></div>
         <span class="event-label">Video Final</span>
       </div>
     </div>
     <div class="event-card fade-up">
-      <iframe title="Event film" loading="lazy" src="https://drive.google.com/file/d/18nWqF26Amp7_usV80EBGbmPKSSK3otSi/preview" allow="autoplay" allowfullscreen></iframe>
+      <iframe class="drive-embed" title="Event film" data-src="https://drive.google.com/file/d/18nWqF26Amp7_usV80EBGbmPKSSK3otSi/preview" allow="autoplay; fullscreen" allowfullscreen></iframe>
       <div class="event-card-info">
         <div class="event-dot"></div>
         <span class="event-label">Video Final</span>
@@ -1368,10 +1508,12 @@
   </div>
 </section>
 
+</main>
+
 <!-- FOOTER -->
 <footer>
   <a href="#hero" class="footer-logo">Sara Mahrous</a>
-  <div class="footer-copy">© 2025 Sara Mahrous. All rights reserved.</div>
+  <div class="footer-copy">© 2026 Sara Mahrous. All rights reserved.</div>
   <div class="footer-ig">
     <a href="https://www.instagram.com/sara_media_coverage" target="_blank" rel="noopener">@sara_media_coverage</a>
   </div>
@@ -1380,11 +1522,11 @@
 <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
 <!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox">
-  <button class="lightbox-close" onclick="closeLightbox()">×</button>
-  <button class="lb-prev" onclick="changeLightbox(-1)">‹</button>
-  <img id="lightboxImg" src="" alt="Portfolio photo" />
-  <button class="lb-next" onclick="changeLightbox(1)">›</button>
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Fullscreen photo" aria-hidden="true">
+  <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Close fullscreen viewer">×</button>
+  <button type="button" class="lb-prev" id="lightboxPrev" aria-label="Previous photo">‹</button>
+  <img id="lightboxImg" src="" alt="" />
+  <button type="button" class="lb-next" id="lightboxNext" aria-label="Next photo">›</button>
 </div>
 
 <nav class="bottom-nav" id="bottom-nav" aria-label="Section navigation">
@@ -1411,6 +1553,31 @@
 </nav>
 
 <script>
+  // Defer Google Drive embeds until near viewport (cuts initial requests and heavy iframe work)
+  (function () {
+    var nodes = document.querySelectorAll('iframe.drive-embed[data-src]');
+    function loadIframe(iframe) {
+      var url = iframe.getAttribute('data-src');
+      if (!url) return;
+      iframe.setAttribute('src', url);
+      iframe.removeAttribute('data-src');
+    }
+    if (!nodes.length) return;
+    if (!('IntersectionObserver' in window)) {
+      for (var i = 0; i < nodes.length; i++) loadIframe(nodes[i]);
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      for (var j = 0; j < entries.length; j++) {
+        var entry = entries[j];
+        if (!entry.isIntersecting) continue;
+        loadIframe(entry.target);
+        io.unobserve(entry.target);
+      }
+    }, { root: null, rootMargin: '200px 0px 180px 0px', threshold: 0 });
+    for (var k = 0; k < nodes.length; k++) io.observe(nodes[k]);
+  })();
+
   // Nav scroll effect (rAF coalescing + passive listener)
   const nav = document.getElementById('nav');
   let scrollPending = false;
@@ -1484,7 +1651,7 @@
   }, { threshold: 0.12 });
   fadeEls.forEach(el => observer.observe(el));
 
-  // Lightbox
+  // Lightbox (dialog semantics, focus restore, inert backdrop, dynamic alt)
   const photos = [
     'fashion/IMG_1971.webp',
     'fashion/IMG_1982.webp',
@@ -1496,38 +1663,109 @@
     'fashion/IMG_2388.webp',
     'fashion/IMG_2336.webp',
   ];
+  const photoAlts = [
+    'Editorial portrait: warm side light and tailored styling',
+    'Full-length look on a clean studio floor, strong posture',
+    'High-contrast editorial with bold color and shape',
+    'Minimal set: strong silhouette on a neutral backdrop',
+    'Campaign-style hero frame with dramatic rim light',
+    'Detail study: fabric texture, styling, and tone',
+    'Natural daylight fashion frame, outdoor or window light',
+    'Magazine-style composition with asymmetrical framing',
+    'Portrait: soft expression, calm balance, shallow depth',
+  ];
   let currentPhoto = 0;
+  let lastFocusBeforeLightbox = null;
+  const lightboxEl = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const mainEl = document.getElementById('main');
+
+  function setBehindLightboxInert(on) {
+    [mainEl, document.getElementById('nav'), document.querySelector('footer'), document.getElementById('bottom-nav')].forEach(function (el) {
+      if (el && 'inert' in el) el.inert = on;
+    });
+  }
+
+  function applyLightboxImage() {
+    lightboxImg.src = photos[currentPhoto];
+    lightboxImg.alt = photoAlts[currentPhoto];
+  }
 
   function openLightbox(idx) {
+    lastFocusBeforeLightbox = document.activeElement;
     currentPhoto = idx;
-    document.getElementById('lightboxImg').src = photos[idx];
-    document.getElementById('lightbox').classList.add('active');
+    applyLightboxImage();
+    lightboxEl.classList.add('active');
+    lightboxEl.setAttribute('aria-hidden', 'false');
     document.body.classList.add('lightbox-open');
     document.body.style.overflow = 'hidden';
+    setBehindLightboxInert(true);
+    requestAnimationFrame(function () {
+      const closeBtn = document.getElementById('lightboxClose');
+      if (closeBtn) closeBtn.focus();
+    });
   }
+
   function closeLightbox() {
-    document.getElementById('lightbox').classList.remove('active');
+    lightboxEl.classList.remove('active');
+    lightboxEl.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('lightbox-open');
     document.body.style.overflow = '';
+    setBehindLightboxInert(false);
+    if (lastFocusBeforeLightbox && typeof lastFocusBeforeLightbox.focus === 'function') {
+      try {
+        lastFocusBeforeLightbox.focus();
+      } catch (err) { /* ignore */ }
+    }
+    lastFocusBeforeLightbox = null;
   }
+
   function changeLightbox(dir) {
     currentPhoto = (currentPhoto + dir + photos.length) % photos.length;
-    document.getElementById('lightboxImg').src = photos[currentPhoto];
+    applyLightboxImage();
   }
-  document.getElementById('lightbox').addEventListener('click', function(e) {
+
+  document.getElementById('photoGrid').addEventListener('click', function (e) {
+    const btn = e.target.closest('.photo-item[data-lightbox-index]');
+    if (!btn) return;
+    openLightbox(parseInt(btn.getAttribute('data-lightbox-index'), 10));
+  });
+
+  document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+  document.getElementById('lightboxPrev').addEventListener('click', function () { changeLightbox(-1); });
+  document.getElementById('lightboxNext').addEventListener('click', function () { changeLightbox(1); });
+
+  lightboxEl.addEventListener('click', function (e) {
     if (e.target === this) closeLightbox();
   });
+
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') {
-      const lb = document.getElementById('lightbox');
-      if (lb.classList.contains('active')) {
-        closeLightbox();
-        return;
+    const lbOpen = lightboxEl.classList.contains('active');
+    if (lbOpen && e.key === 'Tab') {
+      const focusables = Array.prototype.slice.call(
+        lightboxEl.querySelectorAll('#lightboxClose, #lightboxPrev, #lightboxNext')
+      );
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
       }
       return;
     }
-    const lb = document.getElementById('lightbox');
-    if (!lb.classList.contains('active')) return;
+    if (e.key === 'Escape') {
+      if (lbOpen) closeLightbox();
+      return;
+    }
+    if (!lbOpen) return;
     if (e.key === 'ArrowLeft') changeLightbox(-1);
     if (e.key === 'ArrowRight') changeLightbox(1);
   });
@@ -1575,13 +1813,6 @@
     });
   })();
 
-  if (typeof console !== 'undefined' && console.log) {
-    console.log(
-      '%cSara Mahrous%c — Thanks for opening the console. For bookings, use Contact or WhatsApp.',
-      'color: #d4b24a; font-weight: 600;',
-      'color: #9a9188;'
-    );
-  }
 </script>
 </body>
 </html>
