@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sara Mahrous | Photographer & Media Creator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --bg2: #111111;
+      --bg3: #181818;
+      --text: #f5f0e8;
+      --text-muted: #888;
+      --gold: #c9a84c;
+      --gold-light: #e0c06e;
+      --border: rgba(201,168,76,0.2);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      transition: padding 0.3s;
+    }
+    nav.scrolled { padding: 0.8rem 4rem; }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--text); font-style: italic; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    /* hamburger (mobile) */
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { display: block; width: 24px; height: 1.5px; background: var(--text); transition: 0.3s; }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('fashion/IMG_2085.webp');
+      background-size: cover;
+      background-position: center 45%;
+      filter: brightness(0.3);
+      transform: scale(1.05);
+      transition: transform 8s ease;
+    }
+    #hero.loaded .hero-bg { transform: scale(1); }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(10,10,10,0.2) 0%, rgba(10,10,10,0.6) 60%, var(--bg) 100%);
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      display: flex; flex-direction: column; align-items: center; gap: 1.6rem;
+    }
+    .hero-tag {
+      font-size: 0.72rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid var(--border);
+      padding: 0.45rem 1.4rem;
+      border-radius: 50px;
+    }
+    .hero-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.5rem, 9vw, 7.5rem);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: 0.02em;
+    }
+    .hero-name em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .hero-sub {
+      font-size: clamp(0.85rem, 1.5vw, 1rem);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .hero-cta {
+      display: flex; gap: 1.2rem; flex-wrap: wrap; justify-content: center;
+      margin-top: 0.5rem;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.9rem 2rem;
+      border-radius: 3px;
+      transition: all 0.3s;
+    }
+    .btn-gold {
+      background: var(--gold);
+      color: #0a0a0a;
+    }
+    .btn-gold:hover { background: var(--gold-light); transform: translateY(-2px); }
+    .btn-outline {
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.5rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      opacity: 0.5; cursor: pointer;
+      transition: opacity 0.3s;
+      text-decoration: none;
+    }
+    .hero-scroll:hover { opacity: 1; }
+    .hero-scroll span { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); }
+    .scroll-line {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%,100% { opacity: 0.4; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.1); }
+    }
+
+    /* ── SECTIONS ── */
+    section { padding: 7rem 4rem; }
+    .section-header { text-align: center; margin-bottom: 4.5rem; }
+    .section-tag {
+      display: inline-block;
+      font-size: 0.68rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 400;
+      line-height: 1.15;
+    }
+    .section-title em { font-style: italic; color: var(--gold); }
+    .section-divider {
+      width: 50px; height: 1px;
+      background: var(--gold);
+      margin: 1.5rem auto 0;
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--bg2); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .about-img-wrap {
+      position: relative;
+    }
+    .about-img-wrap::before {
+      content: '';
+      position: absolute;
+      top: -20px; left: -20px;
+      right: 20px; bottom: 20px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      z-index: 0;
+    }
+    .about-img {
+      position: relative; z-index: 1;
+      width: 100%;
+      aspect-ratio: 4/5;
+      object-fit: cover;
+      border-radius: 4px;
+      display: block;
+    }
+    .about-badge {
+      position: absolute;
+      bottom: -1rem; right: -1rem;
+      z-index: 2;
+      background: var(--gold);
+      color: #0a0a0a;
+      padding: 1.2rem 1.5rem;
+      border-radius: 4px;
+      text-align: center;
+      font-weight: 600;
+    }
+    .about-badge .num { font-family: 'Playfair Display', serif; font-size: 2rem; display: block; line-height: 1; }
+    .about-badge .lbl { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; }
+    .about-text h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      font-weight: 400;
+      line-height: 1.3;
+      margin-bottom: 1.5rem;
+    }
+    .about-text h2 em { font-style: italic; color: var(--gold); }
+    .about-text p {
+      color: var(--text-muted);
+      line-height: 1.85;
+      font-size: 0.95rem;
+      margin-bottom: 1.2rem;
+    }
+    .about-services {
+      display: flex; flex-wrap: wrap; gap: 0.8rem;
+      margin-top: 2rem;
+    }
+    .service-tag {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.5rem 1.1rem;
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      color: var(--text-muted);
+      transition: all 0.3s;
+    }
+    .service-tag:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ── FASHION GALLERY ── */
+    #fashion { background: var(--bg); }
+    .photo-grid {
+      columns: 3;
+      column-gap: 1rem;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+    .photo-item {
+      break-inside: avoid;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      border-radius: 4px;
+      cursor: pointer;
+      position: relative;
+    }
+    .photo-item img {
+      width: 100%;
+      display: block;
+      transition: transform 0.6s ease;
+    }
+    .photo-item:hover img { transform: scale(1.04); }
+    .photo-overlay {
+      position: absolute; inset: 0;
+      background: rgba(10,10,10,0);
+      display: flex; align-items: flex-end;
+      padding: 1.5rem;
+      transition: background 0.4s;
+    }
+    .photo-item:hover .photo-overlay { background: rgba(10,10,10,0.4); }
+    .gallery-cta { text-align: center; margin-top: 3rem; }
+
+    /* ── UGC ── */
+    #ugc { background: var(--bg2); }
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.2rem;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+    .video-card {
+      position: relative;
+      background: var(--bg3);
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .video-card:hover { border-color: var(--gold); transform: translateY(-4px); }
+    .video-card iframe {
+      width: 100%;
+      aspect-ratio: 9/16;
+      display: block;
+      border: none;
+    }
+    .video-card-label {
+      padding: 0.8rem 1rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* ── EVENTS ── */
+    #events { background: var(--bg); }
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .event-card {
+      background: var(--bg3);
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .event-card:hover { border-color: var(--gold); transform: translateY(-4px); }
+    .event-card iframe {
+      width: 100%;
+      aspect-ratio: 16/9;
+      display: block;
+      border: none;
+    }
+    .event-card-info {
+      padding: 1rem 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .event-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+    .event-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* ── STATS ── */
+    #stats {
+      background: linear-gradient(135deg, #111 0%, #1a1500 100%);
+      padding: 5rem 4rem;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      font-weight: 400;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 0.6rem;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--bg2);
+      text-align: center;
+    }
+    .contact-inner { max-width: 650px; margin: 0 auto; }
+    .contact-desc {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.8;
+      margin: 1.5rem 0 3rem;
+    }
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      padding: 0.8rem 1.4rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      transition: all 0.3s;
+    }
+    .contact-link:hover { border-color: var(--gold); color: var(--gold); }
+    .contact-link svg { width: 18px; height: 18px; }
+    .contact-cta-text {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #050505;
+      padding: 2.5rem 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      color: var(--gold);
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+    }
+    .footer-copy {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.25);
+      letter-spacing: 0.05em;
+    }
+    .footer-ig a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      transition: color 0.3s;
+    }
+    .footer-ig a:hover { color: var(--gold); }
+
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      display: none;
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,0.95);
+      align-items: center;
+      justify-content: center;
+    }
+    .lightbox.active { display: flex; }
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: 4px;
+    }
+    .lightbox-close {
+      position: absolute; top: 1.5rem; right: 2rem;
+      font-size: 2rem; color: var(--text); cursor: pointer;
+      background: none; border: none; line-height: 1;
+    }
+    .lb-prev, .lb-next {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: none; border: none;
+      color: var(--text); font-size: 2rem; cursor: pointer;
+      padding: 1rem;
+      opacity: 0.6; transition: opacity 0.2s;
+    }
+    .lb-prev:hover, .lb-next:hover { opacity: 1; }
+    .lb-prev { left: 1rem; }
+    .lb-next { right: 1rem; }
+
+    /* ── FADE-IN ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+    .fade-up:nth-child(2) { transition-delay: 0.1s; }
+    .fade-up:nth-child(3) { transition-delay: 0.2s; }
+    .fade-up:nth-child(4) { transition-delay: 0.3s; }
+    .fade-up:nth-child(5) { transition-delay: 0.4s; }
+    .fade-up:nth-child(6) { transition-delay: 0.5s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .photo-grid { columns: 2; }
+      .video-grid { grid-template-columns: repeat(2, 1fr); }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      nav.scrolled { padding: 0.7rem 1.5rem; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      section { padding: 5rem 1.5rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .about-img-wrap { max-width: 380px; margin: 0 auto; }
+      .photo-grid { columns: 2; }
+      .video-grid { grid-template-columns: 1fr; }
+      .events-grid { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .photo-grid { columns: 1; }
+      .hero-cta { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#hero" class="nav-logo">Sara <span>Mahrous</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#fashion">Photography</a></li>
+    <li><a href="#ugc">UGC</a></li>
+    <li><a href="#events">Events</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Photographer · UGC Creator · Media Coverage</div>
+    <h1 class="hero-name">Sara<br><em>Mahrous</em></h1>
+    <p class="hero-sub">Fashion &nbsp;·&nbsp; Events &nbsp;·&nbsp; Branded Content</p>
+    <div class="hero-cta">
+      <a href="#fashion" class="btn btn-gold">View Portfolio</a>
+      <a href="#contact" class="btn btn-outline">Work With Me</a>
+    </div>
+  </div>
+  <a href="#about" class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </a>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-img-wrap fade-up">
+      <img
+        class="about-img"
+        src="about%20image.jpeg"
+        alt="Sara Mahrous"
+        loading="lazy"
+      />
+      <div class="about-badge">
+        <span class="num">3+</span>
+        <span class="lbl">Years of<br>Experience</span>
+      </div>
+    </div>
+    <div class="about-text fade-up">
+      <div class="section-tag">About Me</div>
+      <h2>Capturing <em>Stories</em><br>Through the Lens</h2>
+      <p>
+        I'm Sara Mahrous — a Cairo-based photographer, UGC creator, and media coverage specialist
+        with a passion for turning moments into timeless visual stories.
+      </p>
+      <p>
+        From the fine details of a fashion editorial to the raw emotion of wedding ceremonies,
+        I bring an artistic eye and a cinematic sensibility to every project.
+        My work bridges the gap between authentic storytelling and polished brand content.
+      </p>
+      <p>
+        Whether you're a fashion brand looking for compelling UGC, a couple planning your dream wedding,
+        or a business in need of professional event documentation — I deliver visuals that speak.
+      </p>
+      <div class="about-services">
+        <span class="service-tag">Fashion Photography</span>
+        <span class="service-tag">UGC & Brand Content</span>
+        <span class="service-tag">Event Coverage</span>
+        <span class="service-tag">Wedding Films</span>
+        <span class="service-tag">Reels & Short Video</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div id="stats">
+  <div class="stats-grid">
+    <div class="fade-up">
+      <div class="stat-num">72+</div>
+      <div class="stat-label">Projects</div>
+    </div>
+    <div class="fade-up">
+      <div class="stat-num">1.6K</div>
+      <div class="stat-label">Followers</div>
+    </div>
+    <div class="fade-up">
+      <div class="stat-num">3</div>
+      <div class="stat-label">Specialties</div>
+    </div>
+    <div class="fade-up">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Passion</div>
+    </div>
+  </div>
+</div>
+
+<!-- FASHION PHOTOGRAPHY -->
+<section id="fashion">
+  <div class="section-header fade-up">
+    <div class="section-tag">Portfolio</div>
+    <h2 class="section-title">Fashion <em>Photography</em></h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="photo-grid" id="photoGrid">
+    <div class="photo-item fade-up" onclick="openLightbox(0)">
+      <img src="fashion/IMG_1971.webp" alt="Fashion shoot" loading="lazy" />
+      <div class="photo-overlay"></div>
+    </div>
+    <div class="photo-item fade-up" onclick="openLightbox(1)">
+      <img src="fashion/IMG_1982.webp" alt="Fashion shoot" loading="lazy" />
+      <div class="photo-overlay"></div>
+    </div>
+    <div class="photo-item fade-up" onclick="openLightbox(2)">
+      <img src="fashion/IMG_1995.webp" alt="Fashion shoot" loading="lazy" />
+      <div class="photo-overlay"></div>
+    </div>
+    <div class="photo-item fade-up" onclick="openLightbox(3)">
+      <img src="fashion/IMG_2047.webp" alt="Fashion shoot" loading="lazy" />
+      <div class="photo-overlay"></div>
+    </div>
+    <div class="photo-item fade-up" onclick="openLightbox(4)">
+      <img src="fashion/IMG_2085.webp" alt="Fashion shoot" loading="lazy" />
+      <div class="photo-overlay"></div>
+    </div>
+    <div class="photo-item fade-up" onclick="openLightbox(5)">
+      <img src="fashion/IMG_2221.webp" alt="Fashion shoot" loading="lazy" />
+      <div class="photo-overlay"></div>
+    </div>
+    <div class="photo-item fade-up" onclick="openLightbox(6)">
+      <img src="fashion/IMG_2315.webp" alt="Fashion shoot" loading="lazy" />
+      <div class="photo-overlay"></div>
+    </div>
+    <div class="photo-item fade-up" onclick="openLightbox(7)">
+      <img src="fashion/IMG_2388.webp" alt="Fashion shoot" loading="lazy" />
+      <div class="photo-overlay"></div>
+    </div>
+    <div class="photo-item fade-up" onclick="openLightbox(7)">
+      <img src="fashion/IMG_2336.webp" alt="Fashion shoot" loading="lazy" />
+      <div class="photo-overlay"></div>
+    </div>
+  </div>
+  <div class="gallery-cta fade-up">
+    <a href="https://drive.google.com/drive/folders/1WxM95s49GfO3aALE9_6VWDm2B3clqbYn" target="_blank" rel="noopener" class="btn btn-outline">
+      View Full Gallery
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6m0 0v6m0-6L10 14"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- UGC -->
+<section id="ugc">
+  <div class="section-header fade-up">
+    <div class="section-tag">Content Creation</div>
+    <h2 class="section-title">UGC & <em>Brand Content</em></h2>
+    <div class="section-divider"></div>
+  </div>
+  <p style="text-align:center; color:var(--text-muted); max-width:600px; margin:-2rem auto 3.5rem; font-size:0.95rem; line-height:1.8;">
+    Authentic, scroll-stopping content crafted for brands — from product showcases to lifestyle reels
+    that connect with real audiences.
+  </p>
+  <div class="video-grid">
+    <div class="video-card fade-up">
+      <iframe src="https://drive.google.com/file/d/10auOMtz-CL9XlZCL2xQZ2LJ1S3zx46Ss/preview" allow="autoplay" allowfullscreen></iframe>
+      <div class="video-card-label">UGC · Brand Video</div>
+    </div>
+    <div class="video-card fade-up">
+      <iframe src="https://drive.google.com/file/d/1Kvb9lXd6aKgqCQQJqJqLI4qCwWqpYI2f/preview" allow="autoplay" allowfullscreen></iframe>
+      <div class="video-card-label">UGC · Product Showcase</div>
+    </div>
+    <div class="video-card fade-up">
+      <iframe src="https://drive.google.com/file/d/1yCietX3a9xXgEWJDA6rCnunXuOQWZXnD/preview" allow="autoplay" allowfullscreen></iframe>
+      <div class="video-card-label">UGC · Lifestyle Reel</div>
+    </div>
+    <div class="video-card fade-up">
+      <iframe src="https://drive.google.com/file/d/1azDgK1PfLaGK1BaYzDgdun45CovNgO-V/preview" allow="autoplay" allowfullscreen></iframe>
+      <div class="video-card-label">UGC · Brand Video</div>
+    </div>
+    <div class="video-card fade-up">
+      <iframe src="https://drive.google.com/file/d/1XQ5xFLbIn_a7d5KeHbwrB5s37XTHGaag/preview" allow="autoplay" allowfullscreen></iframe>
+      <div class="video-card-label">UGC · Content Reel</div>
+    </div>
+    <div class="video-card fade-up">
+      <iframe src="https://drive.google.com/file/d/1eD65dnYmljaN-dcbA2FOxzT1WDZsYXsv/preview" allow="autoplay" allowfullscreen></iframe>
+      <div class="video-card-label">UGC · Lifestyle</div>
+    </div>
+  </div>
+  <div class="gallery-cta fade-up">
+    <a href="https://drive.google.com/drive/folders/1L-MdGOpGmkX5IC449KHPkMzMFqExhJYV" target="_blank" rel="noopener" class="btn btn-outline">
+      View All UGC Work
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6m0 0v6m0-6L10 14"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- EVENTS -->
+<section id="events">
+  <div class="section-header fade-up">
+    <div class="section-tag">Media Coverage</div>
+    <h2 class="section-title">Event <em>Films</em></h2>
+    <div class="section-divider"></div>
+  </div>
+  <p style="text-align:center; color:var(--text-muted); max-width:600px; margin:-2rem auto 3.5rem; font-size:0.95rem; line-height:1.8;">
+    Cinematic event coverage that preserves every precious moment —
+    weddings, celebrations, and corporate occasions told through a story-driven lens.
+  </p>
+  <div class="events-grid">
+    <div class="event-card fade-up">
+      <iframe src="https://drive.google.com/file/d/12vISkc6za1EbO3ojG5gVNx59d0WZE172/preview" allow="autoplay" allowfullscreen></iframe>
+      <div class="event-card-info">
+        <div class="event-dot"></div>
+        <span class="event-label">Event Reel</span>
+      </div>
+    </div>
+    <div class="event-card fade-up">
+      <iframe src="https://drive.google.com/file/d/1Wpwd_alhDbz8sXgaG5LPZJMFmavTSier/preview" allow="autoplay" allowfullscreen></iframe>
+      <div class="event-card-info">
+        <div class="event-dot"></div>
+        <span class="event-label">Event Reel</span>
+      </div>
+    </div>
+    <div class="event-card fade-up">
+      <iframe src="https://drive.google.com/file/d/13TdtLcvx5FuxiD6PJCfQWdzY4o_N8LgX/preview" allow="autoplay" allowfullscreen></iframe>
+      <div class="event-card-info">
+        <div class="event-dot"></div>
+        <span class="event-label">Video Final</span>
+      </div>
+    </div>
+    <div class="event-card fade-up">
+      <iframe src="https://drive.google.com/file/d/18nWqF26Amp7_usV80EBGbmPKSSK3otSi/preview" allow="autoplay" allowfullscreen></iframe>
+      <div class="event-card-info">
+        <div class="event-dot"></div>
+        <span class="event-label">Video Final</span>
+      </div>
+    </div>
+  </div>
+  <div class="gallery-cta fade-up">
+    <a href="https://drive.google.com/drive/folders/1OEu1Sf8IX1WD_kE4YRzdkmFqebMy-sDl" target="_blank" rel="noopener" class="btn btn-outline">
+      View All Events
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6m0 0v6m0-6L10 14"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="section-tag fade-up">Let's Connect</div>
+    <h2 class="section-title fade-up">Let's Create<br><em>Something Beautiful</em></h2>
+    <div class="section-divider fade-up"></div>
+    <p class="contact-desc fade-up">
+      Ready to tell your story? Whether it's a fashion campaign, branded UGC content,
+      or capturing a special event — I'd love to hear from you.
+    </p>
+    <div class="contact-links fade-up">
+      <a href="https://www.instagram.com/sara_media_coverage" target="_blank" rel="noopener" class="contact-link">
+        <!-- Instagram icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        @sara_media_coverage
+      </a>
+      <a href="https://wa.me/201157126764" target="_blank" rel="noopener" class="contact-link">
+        <!-- WhatsApp icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+        +20 11 57126764
+      </a>
+    </div>
+    <p class="contact-cta-text fade-up">Available for bookings — fashion, UGC & events</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Sara Mahrous</div>
+  <div class="footer-copy">© 2025 Sara Mahrous. All rights reserved.</div>
+  <div class="footer-ig">
+    <a href="https://www.instagram.com/sara_media_coverage" target="_blank" rel="noopener">@sara_media_coverage</a>
+  </div>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()">×</button>
+  <button class="lb-prev" onclick="changeLightbox(-1)">‹</button>
+  <img id="lightboxImg" src="" alt="Portfolio photo" />
+  <button class="lb-next" onclick="changeLightbox(1)">›</button>
+</div>
+
+<script>
+  // Nav scroll effect
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Hero loaded
+  window.addEventListener('load', () => {
+    document.getElementById('hero').classList.add('loaded');
+  });
+
+  // Mobile menu
+  function toggleMenu() {
+    const links = document.querySelector('.nav-links');
+    const isOpen = links.style.display === 'flex';
+    links.style.cssText = isOpen ? '' : 'display:flex; flex-direction:column; position:fixed; top:60px; left:0; right:0; background:rgba(10,10,10,0.97); padding:2rem; gap:1.5rem; z-index:99;';
+  }
+
+  // Fade-in on scroll
+  const fadeEls = document.querySelectorAll('.fade-up');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  fadeEls.forEach(el => observer.observe(el));
+
+  // Lightbox
+  const photos = [
+    'fashion/IMG_1971.webp',
+    'fashion/IMG_1982.webp',
+    'fashion/IMG_1995.webp',
+    'fashion/IMG_2047.webp',
+    'fashion/IMG_2085.webp',
+    'fashion/IMG_2221.webp',
+    'fashion/IMG_2315.webp',
+    'fashion/IMG_2388.webp',
+  ];
+  let currentPhoto = 0;
+
+  function openLightbox(idx) {
+    currentPhoto = idx;
+    document.getElementById('lightboxImg').src = photos[idx];
+    document.getElementById('lightbox').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  function changeLightbox(dir) {
+    currentPhoto = (currentPhoto + dir + photos.length) % photos.length;
+    document.getElementById('lightboxImg').src = photos[currentPhoto];
+  }
+  document.getElementById('lightbox').addEventListener('click', function(e) {
+    if (e.target === this) closeLightbox();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') changeLightbox(-1);
+    if (e.key === 'ArrowRight') changeLightbox(1);
+  });
+</script>
+</body>
+</html>
