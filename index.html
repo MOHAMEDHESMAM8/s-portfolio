@@ -431,6 +431,51 @@
         color: var(--gold);
         background: color-mix(in srgb, var(--gold) 8%, transparent);
       }
+      #backToTop {
+        position: fixed;
+        right: max(1rem, env(safe-area-inset-right));
+        bottom: max(1rem, env(safe-area-inset-bottom));
+        z-index: 220;
+        width: 46px;
+        height: 46px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--bg2) 92%, black);
+        color: var(--gold);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: translateY(10px);
+        transition:
+          opacity 0.28s var(--ease-out-expo),
+          transform 0.28s var(--ease-out-expo),
+          border-color 0.25s var(--ease-out-expo);
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+      }
+      #backToTop.is-visible {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateY(0);
+      }
+      #backToTop svg {
+        width: 20px;
+        height: 20px;
+      }
+      @media (hover: hover) and (pointer: fine) {
+        #backToTop:hover {
+          border-color: color-mix(in srgb, var(--gold) 38%, transparent);
+          color: var(--gold-light);
+        }
+      }
+      #backToTop:active {
+        color: var(--gold-light);
+        border-color: color-mix(in srgb, var(--gold) 38%, transparent);
+      }
 
       /* ── HERO ── */
       #hero {
@@ -1431,6 +1476,9 @@
         body {
           padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
         }
+        #backToTop {
+          bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+        }
         .bottom-nav {
           display: flex;
         }
@@ -1615,7 +1663,7 @@
           <div class="hero-tag">
             Photographer · UGC Creator · Media Coverage
           </div>
-          <h1 class="hero-name">Sara<br /><em>Mahrous</em></h1>
+          <h1 class="hero-name">Sara <br /><em>Mahrous</em></h1>
           <p class="hero-sub">
             Fashion &nbsp;·&nbsp; Events &nbsp;·&nbsp; Branded Content
           </p>
@@ -2324,6 +2372,20 @@
         Contact
       </a>
     </nav>
+    <button id="backToTop" type="button" aria-label="Back to top">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M12 19V5" />
+        <path d="M5 12l7-7 7 7" />
+      </svg>
+    </button>
 
     <script>
       // Load external links from JSON so they can be managed outside this file.
@@ -2616,6 +2678,21 @@
         passive: true,
       });
       updateBottomNavActive();
+
+      // Back-to-top button
+      (function () {
+        const btn = document.getElementById("backToTop");
+        if (!btn) return;
+        function updateBackToTop() {
+          if (window.scrollY > 520) btn.classList.add("is-visible");
+          else btn.classList.remove("is-visible");
+        }
+        btn.addEventListener("click", function () {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+        window.addEventListener("scroll", updateBackToTop, { passive: true });
+        updateBackToTop();
+      })();
 
       // Fade-in on scroll
       const fadeEls = document.querySelectorAll(".fade-up");
