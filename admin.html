@@ -29,7 +29,7 @@
       }
 
       .wrap {
-        max-width: 760px;
+        max-width: 860px;
         margin: 0 auto;
         padding: 2rem 1rem 4rem;
       }
@@ -59,7 +59,8 @@
         font-size: 0.95rem;
       }
 
-      input {
+      input,
+      textarea {
         width: 100%;
         border: 1px solid var(--border);
         background: #10141b;
@@ -70,14 +71,7 @@
       }
 
       textarea {
-        width: 100%;
-        min-height: 150px;
-        border: 1px solid var(--border);
-        background: #10141b;
-        color: var(--text);
-        border-radius: 8px;
-        padding: 0.62rem 0.72rem;
-        font-size: 0.9rem;
+        min-height: 170px;
         line-height: 1.45;
         resize: vertical;
         font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -87,6 +81,7 @@
         display: flex;
         gap: 0.75rem;
         margin-top: 0.4rem;
+        flex-wrap: wrap;
       }
 
       button {
@@ -97,19 +92,24 @@
         cursor: pointer;
       }
 
-      #saveBtn {
+      #saveBtn,
+      #loginBtn,
+      #addFashionVideoBtn {
         background: var(--accent);
         color: #fff;
       }
 
-      #reloadBtn {
+      #reloadBtn,
+      #logoutBtn,
+      .remove-fashion-video {
         background: transparent;
         color: var(--text);
         border: 1px solid var(--border);
       }
 
-      #status {
-        margin-top: 0.9rem;
+      #status,
+      #loginStatus {
+        margin-top: 0.5rem;
         min-height: 1.2rem;
         font-size: 0.92rem;
         color: var(--muted);
@@ -133,23 +133,57 @@
         margin-bottom: 0.8rem;
       }
 
-      #logoutBtn {
-        background: transparent;
-        color: var(--text);
-        border: 1px solid var(--border);
-      }
-
       .field-help {
         margin: 0.2rem 0 0;
         font-size: 0.8rem;
         color: var(--muted);
+      }
+
+      .tabs {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .tab-btn {
+        border: 1px solid var(--border);
+        background: transparent;
+        color: var(--text);
+      }
+
+      .tab-btn.is-active {
+        background: var(--accent);
+        border-color: transparent;
+      }
+
+      .tab-panel {
+        display: none;
+        gap: 0.95rem;
+      }
+
+      .tab-panel.is-active {
+        display: grid;
+      }
+
+      .fashion-list {
+        display: grid;
+        gap: 0.8rem;
+      }
+
+      .fashion-item {
+        display: grid;
+        gap: 0.6rem;
+        padding: 0.8rem;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: #121722;
       }
     </style>
   </head>
   <body>
     <main class="wrap">
       <h1>Links Dashboard</h1>
-      <p>Edit links, then click Save. This writes to <code>data/links.json</code>.</p>
+      <p>Edit links, videos, and labels, then save to <code>data/links.json</code>.</p>
 
       <form id="loginForm">
         <label>
@@ -176,59 +210,79 @@
           <button id="logoutBtn" type="button">Logout</button>
         </div>
         <form id="linksForm">
-        <label>
-          Instagram URL
-          <input id="instagramUrl" type="url" required />
-        </label>
-        <label>
-          Instagram handle text
-          <input id="instagramHandle" type="text" required />
-        </label>
-        <label>
-          WhatsApp URL
-          <input id="whatsappUrl" type="url" required />
-        </label>
-        <label>
-          Phone display text
-          <input id="phoneDisplay" type="text" required />
-        </label>
-        <label>
-          Phone raw value (for copy button)
-          <input id="phoneRaw" type="text" required />
-        </label>
-        <label>
-          Fashion gallery URL
-          <input id="fashionGalleryUrl" type="url" required />
-        </label>
-        <label>
-          UGC gallery URL
-          <input id="ugcGalleryUrl" type="url" required />
-        </label>
-        <label>
-          Events gallery URL
-          <input id="eventsGalleryUrl" type="url" required />
-        </label>
-        <label>
-          Fashion videos JSON (array of {title, previewUrl})
-          <textarea id="fashionVideosJson" required></textarea>
-          <p class="field-help">Example: [{"title":"Fashion video 1","previewUrl":"https://.../preview"}]</p>
-        </label>
-        <label>
-          UGC videos JSON (array of {title, label, previewUrl})
-          <textarea id="ugcVideosJson" required></textarea>
-          <p class="field-help">Use label for card text, title for iframe title.</p>
-        </label>
-        <label>
-          Events videos JSON (array of {title, label, previewUrl})
-          <textarea id="eventsVideosJson" required></textarea>
-          <p class="field-help">Use label for event name under the video.</p>
-        </label>
+          <div class="tabs" role="tablist" aria-label="Admin sections">
+            <button class="tab-btn is-active" type="button" data-tab="data">Data</button>
+            <button class="tab-btn" type="button" data-tab="fashion">Fashion</button>
+            <button class="tab-btn" type="button" data-tab="ugc">UGC</button>
+            <button class="tab-btn" type="button" data-tab="events">Events</button>
+          </div>
 
-        <div class="actions">
-          <button id="saveBtn" type="submit">Save links</button>
-          <button id="reloadBtn" type="button">Reload from JSON</button>
-        </div>
-        <div id="status" role="status" aria-live="polite"></div>
+          <section class="tab-panel is-active" data-panel="data">
+            <label>
+              Instagram URL
+              <input id="instagramUrl" type="url" required />
+            </label>
+            <label>
+              Instagram handle text
+              <input id="instagramHandle" type="text" required />
+            </label>
+            <label>
+              WhatsApp URL
+              <input id="whatsappUrl" type="url" required />
+            </label>
+            <label>
+              Phone display text
+              <input id="phoneDisplay" type="text" required />
+            </label>
+            <label>
+              Phone raw value (for copy button)
+              <input id="phoneRaw" type="text" required />
+            </label>
+            <label>
+              Fashion gallery URL
+              <input id="fashionGalleryUrl" type="url" required />
+            </label>
+            <label>
+              UGC gallery URL
+              <input id="ugcGalleryUrl" type="url" required />
+            </label>
+            <label>
+              Events gallery URL
+              <input id="eventsGalleryUrl" type="url" required />
+            </label>
+          </section>
+
+          <section class="tab-panel" data-panel="fashion">
+            <p class="field-help">
+              Add each fashion video with title + Google Drive preview link.
+            </p>
+            <div id="fashionVideosList" class="fashion-list"></div>
+            <div class="actions">
+              <button id="addFashionVideoBtn" type="button">Add fashion video</button>
+            </div>
+          </section>
+
+          <section class="tab-panel" data-panel="ugc">
+            <label>
+              UGC videos JSON (array of {title, label, previewUrl})
+              <textarea id="ugcVideosJson" required></textarea>
+              <p class="field-help">Use label for card text, title for iframe title.</p>
+            </label>
+          </section>
+
+          <section class="tab-panel" data-panel="events">
+            <label>
+              Events videos JSON (array of {title, label, previewUrl})
+              <textarea id="eventsVideosJson" required></textarea>
+              <p class="field-help">Use label for event name under the video.</p>
+            </label>
+          </section>
+
+          <div class="actions">
+            <button id="saveBtn" type="submit">Save links</button>
+            <button id="reloadBtn" type="button">Reload from JSON</button>
+          </div>
+          <div id="status" role="status" aria-live="polite"></div>
         </form>
       </section>
     </main>
@@ -252,6 +306,10 @@
       const formEl = document.getElementById("linksForm");
       const reloadBtn = document.getElementById("reloadBtn");
       const logoutBtn = document.getElementById("logoutBtn");
+      const tabs = Array.prototype.slice.call(document.querySelectorAll(".tab-btn"));
+      const panels = Array.prototype.slice.call(document.querySelectorAll(".tab-panel"));
+      const fashionListEl = document.getElementById("fashionVideosList");
+      const addFashionVideoBtn = document.getElementById("addFashionVideoBtn");
       let authUser = "";
       let authPass = "";
 
@@ -275,10 +333,10 @@
         try {
           parsed = JSON.parse(raw);
         } catch (err) {
-          throw new Error(`${fieldName} must be valid JSON array.`);
+          throw new Error(fieldName + " must be valid JSON array.");
         }
         if (!Array.isArray(parsed) || parsed.length === 0) {
-          throw new Error(`${fieldName} must be a non-empty array.`);
+          throw new Error(fieldName + " must be a non-empty array.");
         }
         return parsed;
       }
@@ -293,21 +351,73 @@
         }
       }
 
+      function setActiveTab(tabName) {
+        tabs.forEach(function (btn) {
+          const active = btn.getAttribute("data-tab") === tabName;
+          btn.classList.toggle("is-active", active);
+        });
+        panels.forEach(function (panel) {
+          const active = panel.getAttribute("data-panel") === tabName;
+          panel.classList.toggle("is-active", active);
+        });
+      }
+
+      function createFashionVideoRow(video) {
+        const item = document.createElement("div");
+        item.className = "fashion-item";
+        item.innerHTML =
+          '<label>Video title<input type="text" class="fashion-title" required /></label>' +
+          '<label>Preview URL<input type="url" class="fashion-preview" required /></label>' +
+          '<div class="actions"><button type="button" class="remove-fashion-video">Remove</button></div>';
+        item.querySelector(".fashion-title").value = video && video.title ? video.title : "";
+        item.querySelector(".fashion-preview").value =
+          video && video.previewUrl ? video.previewUrl : "";
+        return item;
+      }
+
+      function renderFashionVideos(videos) {
+        fashionListEl.innerHTML = "";
+        const list = Array.isArray(videos) && videos.length ? videos : [{ title: "", previewUrl: "" }];
+        list.forEach(function (video) {
+          fashionListEl.appendChild(createFashionVideoRow(video));
+        });
+      }
+
+      function collectFashionVideos() {
+        const rows = Array.prototype.slice.call(
+          fashionListEl.querySelectorAll(".fashion-item"),
+        );
+        if (!rows.length) {
+          throw new Error("Add at least one fashion video.");
+        }
+
+        return rows.map(function (row, index) {
+          const title = row.querySelector(".fashion-title").value.trim();
+          const previewUrl = row.querySelector(".fashion-preview").value.trim();
+          if (!title) {
+            throw new Error("Fashion video #" + (index + 1) + " title is required.");
+          }
+          if (!previewUrl) {
+            throw new Error("Fashion video #" + (index + 1) + " preview URL is required.");
+          }
+          return { title: title, previewUrl: previewUrl };
+        });
+      }
+
       async function loadLinks() {
         setStatus("Loading current links...");
         try {
           const res = await fetch("/data/links.json", { cache: "no-store" });
           if (!res.ok) throw new Error("Could not load links JSON");
           const data = await res.json();
-          scalarFields.forEach((id) => {
+          scalarFields.forEach(function (id) {
             const el = document.getElementById(id);
             if (el && typeof data[id] === "string") {
               el.value = data[id];
             }
           });
-          document.getElementById("fashionVideosJson").value = stringifyJson(
-            data.fashionVideos || [],
-          );
+
+          renderFashionVideos(data.fashionVideos || []);
           document.getElementById("ugcVideosJson").value = stringifyJson(
             data.ugcVideos || [],
           );
@@ -319,6 +429,23 @@
           setStatus(err.message || "Failed to load links.", "err");
         }
       }
+
+      tabs.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          setActiveTab(btn.getAttribute("data-tab"));
+        });
+      });
+
+      addFashionVideoBtn.addEventListener("click", function () {
+        fashionListEl.appendChild(createFashionVideoRow({ title: "", previewUrl: "" }));
+      });
+
+      fashionListEl.addEventListener("click", function (event) {
+        const removeBtn = event.target.closest(".remove-fashion-video");
+        if (!removeBtn) return;
+        const row = removeBtn.closest(".fashion-item");
+        if (row) row.remove();
+      });
 
       loginFormEl.addEventListener("submit", async function (event) {
         event.preventDefault();
@@ -343,8 +470,8 @@
           authPass = adminPass;
           setLoginStatus("Login successful.", "ok");
           showDashboard(true);
+          setActiveTab("data");
           loadLinks();
-          return;
         } catch (err) {
           setLoginStatus(err.message || "Wrong username or password.", "err");
         }
@@ -366,19 +493,14 @@
         }
 
         const payload = {};
-        scalarFields.forEach((id) => {
+        scalarFields.forEach(function (id) {
           payload[id] = document.getElementById(id).value.trim();
         });
+
         try {
-          payload.fashionVideos = parseJsonField(
-            "fashionVideosJson",
-            "Fashion videos JSON",
-          );
+          payload.fashionVideos = collectFashionVideos();
           payload.ugcVideos = parseJsonField("ugcVideosJson", "UGC videos JSON");
-          payload.eventsVideos = parseJsonField(
-            "eventsVideosJson",
-            "Events videos JSON",
-          );
+          payload.eventsVideos = parseJsonField("eventsVideosJson", "Events videos JSON");
         } catch (err) {
           setStatus(err.message, "err");
           return;
