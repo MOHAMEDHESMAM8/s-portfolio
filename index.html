@@ -2382,7 +2382,22 @@
 
             function applyUgcVideos(videos) {
               if (!Array.isArray(videos)) return;
-              var cards = document.querySelectorAll("#ugc .video-card");
+              var grid = document.querySelector("#ugc .video-grid");
+              if (!grid) return;
+              var cards = Array.prototype.slice.call(
+                grid.querySelectorAll(".video-card"),
+              );
+              if (!cards.length) return;
+              var templateCard = cards[0].cloneNode(true);
+
+              while (cards.length < videos.length) {
+                var newCard = templateCard.cloneNode(true);
+                newCard.classList.remove("fade-up");
+                newCard.classList.add("visible");
+                grid.appendChild(newCard);
+                cards.push(newCard);
+              }
+
               cards.forEach(function (card, index) {
                 var video = videos[index];
                 if (!video) {
@@ -2398,9 +2413,7 @@
                   }
                   if (typeof video.previewUrl === "string" && video.previewUrl) {
                     iframe.setAttribute("data-src", video.previewUrl);
-                    if (iframe.hasAttribute("src")) {
-                      iframe.setAttribute("src", video.previewUrl);
-                    }
+                    iframe.setAttribute("src", video.previewUrl);
                   }
                 }
                 if (label && typeof video.label === "string" && video.label) {
@@ -2411,7 +2424,22 @@
 
             function applyEventVideos(videos) {
               if (!Array.isArray(videos)) return;
-              var cards = document.querySelectorAll("#events .event-card");
+              var grid = document.querySelector("#events .events-grid");
+              if (!grid) return;
+              var cards = Array.prototype.slice.call(
+                grid.querySelectorAll(".event-card"),
+              );
+              if (!cards.length) return;
+              var templateCard = cards[0].cloneNode(true);
+
+              while (cards.length < videos.length) {
+                var newCard = templateCard.cloneNode(true);
+                newCard.classList.remove("fade-up");
+                newCard.classList.add("visible");
+                grid.appendChild(newCard);
+                cards.push(newCard);
+              }
+
               cards.forEach(function (card, index) {
                 var video = videos[index];
                 if (!video) {
@@ -2427,9 +2455,7 @@
                   }
                   if (typeof video.previewUrl === "string" && video.previewUrl) {
                     iframe.setAttribute("data-src", video.previewUrl);
-                    if (iframe.hasAttribute("src")) {
-                      iframe.setAttribute("src", video.previewUrl);
-                    }
+                    iframe.setAttribute("src", video.previewUrl);
                   }
                 }
                 if (label && typeof video.label === "string" && video.label) {
