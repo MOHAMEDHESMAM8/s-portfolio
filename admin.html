@@ -69,6 +69,20 @@
         font-size: 0.95rem;
       }
 
+      textarea {
+        width: 100%;
+        min-height: 150px;
+        border: 1px solid var(--border);
+        background: #10141b;
+        color: var(--text);
+        border-radius: 8px;
+        padding: 0.62rem 0.72rem;
+        font-size: 0.9rem;
+        line-height: 1.45;
+        resize: vertical;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      }
+
       .actions {
         display: flex;
         gap: 0.75rem;
@@ -123,6 +137,12 @@
         background: transparent;
         color: var(--text);
         border: 1px solid var(--border);
+      }
+
+      .field-help {
+        margin: 0.2rem 0 0;
+        font-size: 0.8rem;
+        color: var(--muted);
       }
     </style>
   </head>
@@ -188,6 +208,21 @@
           Events gallery URL
           <input id="eventsGalleryUrl" type="url" required />
         </label>
+        <label>
+          Fashion videos JSON (array of {title, previewUrl})
+          <textarea id="fashionVideosJson" required></textarea>
+          <p class="field-help">Example: [{"title":"Fashion video 1","previewUrl":"https://.../preview"}]</p>
+        </label>
+        <label>
+          UGC videos JSON (array of {title, label, previewUrl})
+          <textarea id="ugcVideosJson" required></textarea>
+          <p class="field-help">Use label for card text, title for iframe title.</p>
+        </label>
+        <label>
+          Events videos JSON (array of {title, label, previewUrl})
+          <textarea id="eventsVideosJson" required></textarea>
+          <p class="field-help">Use label for event name under the video.</p>
+        </label>
 
         <div class="actions">
           <button id="saveBtn" type="submit">Save links</button>
@@ -199,7 +234,7 @@
     </main>
 
     <script>
-      const fields = [
+      const scalarFields = [
         "instagramUrl",
         "instagramHandle",
         "whatsappUrl",
@@ -230,6 +265,24 @@
         statusEl.className = tone || "";
       }
 
+      function stringifyJson(value) {
+        return JSON.stringify(value, null, 2);
+      }
+
+      function parseJsonField(id, fieldName) {
+        const raw = document.getElementById(id).value.trim();
+        let parsed;
+        try {
+          parsed = JSON.parse(raw);
+        } catch (err) {
+          throw new Error(`${fieldName} must be valid JSON array.`);
+        }
+        if (!Array.isArray(parsed) || parsed.length === 0) {
+          throw new Error(`${fieldName} must be a non-empty array.`);
+        }
+        return parsed;
+      }
+
       function showDashboard(isLoggedIn) {
         if (isLoggedIn) {
           loginFormEl.classList.add("hidden");
@@ -246,12 +299,21 @@
           const res = await fetch("/data/links.json", { cache: "no-store" });
           if (!res.ok) throw new Error("Could not load links JSON");
           const data = await res.json();
-          fields.forEach((id) => {
+          scalarFields.forEach((id) => {
             const el = document.getElementById(id);
             if (el && typeof data[id] === "string") {
               el.value = data[id];
             }
           });
+          document.getElementById("fashionVideosJson").value = stringifyJson(
+            data.fashionVideos || [],
+          );
+          document.getElementById("ugcVideosJson").value = stringifyJson(
+            data.ugcVideos || [],
+          );
+          document.getElementById("eventsVideosJson").value = stringifyJson(
+            data.eventsVideos || [],
+          );
           setStatus("Loaded.", "ok");
         } catch (err) {
           setStatus(err.message || "Failed to load links.", "err");
@@ -304,9 +366,23 @@
         }
 
         const payload = {};
-        fields.forEach((id) => {
+        scalarFields.forEach((id) => {
           payload[id] = document.getElementById(id).value.trim();
         });
+        try {
+          payload.fashionVideos = parseJsonField(
+            "fashionVideosJson",
+            "Fashion videos JSON",
+          );
+          payload.ugcVideos = parseJsonField("ugcVideosJson", "UGC videos JSON");
+          payload.eventsVideos = parseJsonField(
+            "eventsVideosJson",
+            "Events videos JSON",
+          );
+        } catch (err) {
+          setStatus(err.message, "err");
+          return;
+        }
 
         setStatus("Saving...");
         try {

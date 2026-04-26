@@ -27,6 +27,26 @@ function assertString(value, name) {
   return value.trim();
 }
 
+function assertVideoList(value, name, includeLabel) {
+  if (!Array.isArray(value) || value.length === 0) {
+    throw new Error(`Invalid field: ${name} must be a non-empty array`);
+  }
+
+  return value.map(function (item, index) {
+    if (!item || typeof item !== "object") {
+      throw new Error(`Invalid field: ${name}[${index}] must be an object`);
+    }
+    const normalized = {
+      title: assertString(item.title, `${name}[${index}].title`),
+      previewUrl: assertString(item.previewUrl, `${name}[${index}].previewUrl`),
+    };
+    if (includeLabel) {
+      normalized.label = assertString(item.label, `${name}[${index}].label`);
+    }
+    return normalized;
+  });
+}
+
 exports.handler = async function handler(event) {
   if (event.httpMethod !== "POST") {
     return jsonResponse(405, { error: "Method not allowed" });
@@ -57,6 +77,9 @@ exports.handler = async function handler(event) {
       fashionGalleryUrl: assertString(payload.fashionGalleryUrl, "fashionGalleryUrl"),
       ugcGalleryUrl: assertString(payload.ugcGalleryUrl, "ugcGalleryUrl"),
       eventsGalleryUrl: assertString(payload.eventsGalleryUrl, "eventsGalleryUrl"),
+      fashionVideos: assertVideoList(payload.fashionVideos, "fashionVideos", false),
+      ugcVideos: assertVideoList(payload.ugcVideos, "ugcVideos", true),
+      eventsVideos: assertVideoList(payload.eventsVideos, "eventsVideos", true),
     };
 
     const githubToken = requireEnv("GITHUB_TOKEN");

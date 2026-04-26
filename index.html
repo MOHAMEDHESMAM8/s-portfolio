@@ -2354,6 +2354,93 @@
                 el.setAttribute("data-copy", links[key]);
               }
             });
+
+            function applyFashionVideos(videos) {
+              if (!Array.isArray(videos)) return;
+              var items = document.querySelectorAll("#fashion .photo-item.video-item");
+              items.forEach(function (item, index) {
+                var video = videos[index];
+                if (!video) {
+                  item.style.display = "none";
+                  return;
+                }
+                item.style.display = "";
+                var iframe = item.querySelector("iframe.drive-embed");
+                if (!iframe) return;
+                if (typeof video.title === "string" && video.title) {
+                  item.setAttribute("aria-label", video.title);
+                  iframe.setAttribute("title", video.title);
+                }
+                if (typeof video.previewUrl === "string" && video.previewUrl) {
+                  iframe.setAttribute("data-src", video.previewUrl);
+                  if (iframe.hasAttribute("src")) {
+                    iframe.setAttribute("src", video.previewUrl);
+                  }
+                }
+              });
+            }
+
+            function applyUgcVideos(videos) {
+              if (!Array.isArray(videos)) return;
+              var cards = document.querySelectorAll("#ugc .video-card");
+              cards.forEach(function (card, index) {
+                var video = videos[index];
+                if (!video) {
+                  card.style.display = "none";
+                  return;
+                }
+                card.style.display = "";
+                var iframe = card.querySelector("iframe.drive-embed");
+                var label = card.querySelector(".video-card-label");
+                if (iframe) {
+                  if (typeof video.title === "string" && video.title) {
+                    iframe.setAttribute("title", video.title);
+                  }
+                  if (typeof video.previewUrl === "string" && video.previewUrl) {
+                    iframe.setAttribute("data-src", video.previewUrl);
+                    if (iframe.hasAttribute("src")) {
+                      iframe.setAttribute("src", video.previewUrl);
+                    }
+                  }
+                }
+                if (label && typeof video.label === "string" && video.label) {
+                  label.textContent = video.label;
+                }
+              });
+            }
+
+            function applyEventVideos(videos) {
+              if (!Array.isArray(videos)) return;
+              var cards = document.querySelectorAll("#events .event-card");
+              cards.forEach(function (card, index) {
+                var video = videos[index];
+                if (!video) {
+                  card.style.display = "none";
+                  return;
+                }
+                card.style.display = "";
+                var iframe = card.querySelector("iframe.drive-embed");
+                var label = card.querySelector(".event-label");
+                if (iframe) {
+                  if (typeof video.title === "string" && video.title) {
+                    iframe.setAttribute("title", video.title);
+                  }
+                  if (typeof video.previewUrl === "string" && video.previewUrl) {
+                    iframe.setAttribute("data-src", video.previewUrl);
+                    if (iframe.hasAttribute("src")) {
+                      iframe.setAttribute("src", video.previewUrl);
+                    }
+                  }
+                }
+                if (label && typeof video.label === "string" && video.label) {
+                  label.textContent = video.label;
+                }
+              });
+            }
+
+            applyFashionVideos(links.fashionVideos);
+            applyUgcVideos(links.ugcVideos);
+            applyEventVideos(links.eventsVideos);
           })
           .catch(function () {
             // Keep hardcoded fallback links when JSON cannot be loaded.

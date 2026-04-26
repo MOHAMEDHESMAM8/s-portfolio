@@ -6,5 +6,78 @@
   "phoneRaw": "+201157126764",
   "fashionGalleryUrl": "https://drive.google.com/drive/folders/1WxM95s49GfO3aALE9_6VWDm2B3clqbYn",
   "ugcGalleryUrl": "https://drive.google.com/drive/folders/1L-MdGOpGmkX5IC449KHPkMzMFqExhJYV",
-  "eventsGalleryUrl": "https://drive.google.com/drive/folders/1OEu1Sf8IX1WD_kE4YRzdkmFqebMy-sDl"
+  "eventsGalleryUrl": "https://drive.google.com/drive/folders/1OEu1Sf8IX1WD_kE4YRzdkmFqebMy-sDl",
+  "fashionVideos": [
+    {
+      "title": "Fashion video 1",
+      "previewUrl": "https://drive.google.com/file/d/1v2y4unqtfk7Ryn-Dm17x7uRvGdqlB04i/preview"
+    },
+    {
+      "title": "Fashion video 2",
+      "previewUrl": "https://drive.google.com/file/d/1XF_31paNJRZMK0aYMew46vVVoXRYh0zK/preview"
+    },
+    {
+      "title": "Fashion video 3",
+      "previewUrl": "https://drive.google.com/file/d/1F3sRSINLX6lj2S7TzHMQ5BO4umQFZwmx/preview"
+    }
+  ],
+  "ugcVideos": [
+    {
+      "title": "UGC brand video",
+      "label": "UGC · Brand Video",
+      "previewUrl": "https://drive.google.com/file/d/10auOMtz-CL9XlZCL2xQZ2LJ1S3zx46Ss/preview"
+    },
+    {
+      "title": "UGC video",
+      "label": "UGC · Product Showcase",
+      "previewUrl": "https://drive.google.com/file/d/1mS1PNII77io4YEfKwoPuG651T4FtZPWB/preview"
+    },
+    {
+      "title": "UGC video",
+      "label": "UGC · Lifestyle Reel",
+      "previewUrl": "https://drive.google.com/file/d/1yCietX3a9xXgEWJDA6rCnunXuOQWZXnD/preview"
+    },
+    {
+      "title": "UGC video",
+      "label": "UGC · Brand Video",
+      "previewUrl": "https://drive.google.com/file/d/1azDgK1PfLaGK1BaYzDgdun45CovNgO-V/preview"
+    },
+    {
+      "title": "UGC video",
+      "label": "UGC · Content Reel",
+      "previewUrl": "https://drive.google.com/file/d/1XQ5xFLbIn_a7d5KeHbwrB5s37XTHGaag/preview"
+    },
+    {
+      "title": "UGC video",
+      "label": "UGC · Lifestyle",
+      "previewUrl": "https://drive.google.com/file/d/1eD65dnYmljaN-dcbA2FOxzT1WDZsYXsv/preview"
+    },
+    {
+      "title": "UGC video",
+      "label": "UGC · Brand Video",
+      "previewUrl": "https://drive.google.com/file/d/1juRnUpGTc7Yp0xeOnHG0__59RnR1tJS4/preview"
+    }
+  ],
+  "eventsVideos": [
+    {
+      "title": "Event film",
+      "label": "Video Final",
+      "previewUrl": "https://drive.google.com/file/d/13TdtLcvx5FuxiD6PJCfQWdzY4o_N8LgX/preview"
+    },
+    {
+      "title": "Event film",
+      "label": "Video Final",
+      "previewUrl": "https://drive.google.com/file/d/18nWqF26Amp7_usV80EBGbmPKSSK3otSi/preview"
+    },
+    {
+      "title": "Event film",
+      "label": "Event Reel",
+      "previewUrl": "https://drive.google.com/file/d/12vISkc6za1EbO3ojG5gVNx59d0WZE172/preview"
+    },
+    {
+      "title": "Event film",
+      "label": "Event Reel",
+      "previewUrl": "https://drive.google.com/file/d/1Wpwd_alhDbz8sXgaG5LPZJMFmavTSier/preview"
+    }
+  ]
 }
