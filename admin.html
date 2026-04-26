@@ -186,6 +186,33 @@
         border-radius: 8px;
         background: #10141b;
       }
+
+      .image-preview {
+        width: 100%;
+        max-width: 220px;
+        aspect-ratio: 4 / 5;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        overflow: hidden;
+        background: #0d1016;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .image-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: none;
+      }
+
+      .image-preview span {
+        color: var(--muted);
+        font-size: 0.82rem;
+        padding: 0.5rem;
+        text-align: center;
+      }
     </style>
   </head>
   <body>
@@ -221,6 +248,9 @@
           <div class="tabs" role="tablist" aria-label="Admin sections">
             <button class="tab-btn is-active" type="button" data-tab="data">Data</button>
             <button class="tab-btn" type="button" data-tab="fashion">Fashion</button>
+            <button class="tab-btn" type="button" data-tab="fashion-images">
+              Fashion Images
+            </button>
             <button class="tab-btn" type="button" data-tab="ugc">UGC</button>
             <button class="tab-btn" type="button" data-tab="events">Events</button>
           </div>
@@ -270,6 +300,9 @@
                 Add fashion video
               </button>
             </div>
+          </section>
+
+          <section class="tab-panel" data-panel="fashion-images">
             <div class="upload-box">
               <label>
                 Upload new fashion image to GitHub
@@ -462,11 +495,29 @@
         selectEl.value = currentValue;
       }
 
+      function updateFashionImagePreview(rowEl) {
+        const src = rowEl.querySelector(".fashion-image-src").value.trim();
+        const imgEl = rowEl.querySelector(".fashion-image-preview-img");
+        const emptyEl = rowEl.querySelector(".fashion-image-preview-empty");
+        if (!imgEl || !emptyEl) return;
+        if (!src) {
+          imgEl.style.display = "none";
+          imgEl.removeAttribute("src");
+          emptyEl.style.display = "";
+          return;
+        }
+        imgEl.src = src;
+        imgEl.style.display = "";
+        emptyEl.style.display = "none";
+      }
+
       function refreshAllImageSourceSelects() {
         const selects = fashionImagesListEl.querySelectorAll(".fashion-image-src");
         selects.forEach(function (selectEl) {
           const selected = selectEl.value;
           setImageSourceSelectOptions(selectEl, selected);
+          const rowEl = selectEl.closest(".fashion-image-item");
+          if (rowEl) updateFashionImagePreview(rowEl);
         });
       }
 
@@ -475,6 +526,7 @@
         item.className = "video-item fashion-image-item";
         item.innerHTML = [
           '<label>Image source<select class="fashion-image-src" required></select></label>',
+          '<div class="image-preview"><img class="fashion-image-preview-img" alt="" /><span class="fashion-image-preview-empty">No image selected</span></div>',
           '<label>Alt text<input type="text" class="fashion-image-alt" required /></label>',
           '<div class="actions"><button type="button" class="remove-image-btn remove-video-btn">Remove</button></div>',
         ].join("");
@@ -482,6 +534,7 @@
         const altEl = item.querySelector(".fashion-image-alt");
         setImageSourceSelectOptions(selectEl, image && image.src ? image.src : "");
         altEl.value = image && image.alt ? image.alt : "";
+        updateFashionImagePreview(item);
         return item;
       }
 
@@ -639,6 +692,13 @@
         if (!removeBtn) return;
         const row = removeBtn.closest(".video-item");
         if (row) row.remove();
+      });
+
+      fashionImagesListEl.addEventListener("change", function (event) {
+        const selectEl = event.target.closest(".fashion-image-src");
+        if (!selectEl) return;
+        const rowEl = selectEl.closest(".fashion-image-item");
+        if (rowEl) updateFashionImagePreview(rowEl);
       });
 
       uploadFashionImageBtn.addEventListener("click", async function () {
