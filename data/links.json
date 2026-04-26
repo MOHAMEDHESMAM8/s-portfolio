@@ -24,60 +24,65 @@
   "ugcVideos": [
     {
       "title": "UGC brand video",
-      "label": "UGC · Brand Video",
-      "previewUrl": "https://drive.google.com/file/d/10auOMtz-CL9XlZCL2xQZ2LJ1S3zx46Ss/preview"
+      "previewUrl": "https://drive.google.com/file/d/10auOMtz-CL9XlZCL2xQZ2LJ1S3zx46Ss/preview",
+      "label": "UGC · Brand Video"
     },
     {
       "title": "UGC video",
-      "label": "UGC · Product Showcase",
-      "previewUrl": "https://drive.google.com/file/d/1mS1PNII77io4YEfKwoPuG651T4FtZPWB/preview"
+      "previewUrl": "https://drive.google.com/file/d/1mS1PNII77io4YEfKwoPuG651T4FtZPWB/preview",
+      "label": "UGC · Product Showcase"
     },
     {
       "title": "UGC video",
-      "label": "UGC · Lifestyle Reel",
-      "previewUrl": "https://drive.google.com/file/d/1yCietX3a9xXgEWJDA6rCnunXuOQWZXnD/preview"
+      "previewUrl": "https://drive.google.com/file/d/1yCietX3a9xXgEWJDA6rCnunXuOQWZXnD/preview",
+      "label": "UGC · Lifestyle Reel"
     },
     {
       "title": "UGC video",
-      "label": "UGC · Brand Video",
-      "previewUrl": "https://drive.google.com/file/d/1azDgK1PfLaGK1BaYzDgdun45CovNgO-V/preview"
+      "previewUrl": "https://drive.google.com/file/d/1azDgK1PfLaGK1BaYzDgdun45CovNgO-V/preview",
+      "label": "UGC · Brand Video"
     },
     {
       "title": "UGC video",
-      "label": "UGC · Content Reel",
-      "previewUrl": "https://drive.google.com/file/d/1XQ5xFLbIn_a7d5KeHbwrB5s37XTHGaag/preview"
+      "previewUrl": "https://drive.google.com/file/d/1XQ5xFLbIn_a7d5KeHbwrB5s37XTHGaag/preview",
+      "label": "UGC · Content Reel"
     },
     {
       "title": "UGC video",
-      "label": "UGC · Lifestyle",
-      "previewUrl": "https://drive.google.com/file/d/1eD65dnYmljaN-dcbA2FOxzT1WDZsYXsv/preview"
+      "previewUrl": "https://drive.google.com/file/d/1eD65dnYmljaN-dcbA2FOxzT1WDZsYXsv/preview",
+      "label": "UGC · Lifestyle"
     },
     {
       "title": "UGC video",
-      "label": "UGC · Brand Video",
-      "previewUrl": "https://drive.google.com/file/d/1juRnUpGTc7Yp0xeOnHG0__59RnR1tJS4/preview"
+      "previewUrl": "https://drive.google.com/file/d/1juRnUpGTc7Yp0xeOnHG0__59RnR1tJS4/preview",
+      "label": "UGC · Brand Video"
+    },
+    {
+      "title": "UGC video 3",
+      "previewUrl": "https://drive.google.com/file/d/1juRnUpGTc7Yp0xeOnHG0__59RnR1tJS4/preview",
+      "label": "UGC · Brand Video"
     }
   ],
   "eventsVideos": [
     {
       "title": "Event film",
-      "label": "Video Final",
-      "previewUrl": "https://drive.google.com/file/d/13TdtLcvx5FuxiD6PJCfQWdzY4o_N8LgX/preview"
+      "previewUrl": "https://drive.google.com/file/d/13TdtLcvx5FuxiD6PJCfQWdzY4o_N8LgX/preview",
+      "label": "Video Final"
     },
     {
       "title": "Event film",
-      "label": "Video Final",
-      "previewUrl": "https://drive.google.com/file/d/18nWqF26Amp7_usV80EBGbmPKSSK3otSi/preview"
+      "previewUrl": "https://drive.google.com/file/d/18nWqF26Amp7_usV80EBGbmPKSSK3otSi/preview",
+      "label": "Video Final"
     },
     {
       "title": "Event film",
-      "label": "Event Reel",
-      "previewUrl": "https://drive.google.com/file/d/12vISkc6za1EbO3ojG5gVNx59d0WZE172/preview"
+      "previewUrl": "https://drive.google.com/file/d/12vISkc6za1EbO3ojG5gVNx59d0WZE172/preview",
+      "label": "Event Reel"
     },
     {
       "title": "Event film",
-      "label": "Event Reel",
-      "previewUrl": "https://drive.google.com/file/d/1Wpwd_alhDbz8sXgaG5LPZJMFmavTSier/preview"
+      "previewUrl": "https://drive.google.com/file/d/1Wpwd_alhDbz8sXgaG5LPZJMFmavTSier/preview",
+      "label": "Event Reel"
     }
   ]
 }
