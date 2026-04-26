@@ -67,14 +67,20 @@ exports.handler = async function handler(event) {
 
     const items = await res.json();
     const allowedExt = /\.(webp|jpg|jpeg|png|gif|avif)$/i;
-    const sources = (Array.isArray(items) ? items : [])
+    const imageItems = (Array.isArray(items) ? items : [])
       .filter((item) => item && item.type === "file" && allowedExt.test(item.name || ""))
-      .map((item) => `fashion/${item.name}`)
-      .sort((a, b) => a.localeCompare(b));
+      .map((item) => ({
+        src: `fashion/${item.name}`,
+        previewUrl: item.download_url || "",
+      }))
+      .sort((a, b) => a.src.localeCompare(b.src));
+
+    const sources = imageItems.map((item) => item.src);
 
     return jsonResponse(200, {
       ok: true,
       sources,
+      images: imageItems,
     });
   } catch (error) {
     if (error.message === "Unauthorized") {

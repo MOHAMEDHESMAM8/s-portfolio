@@ -394,6 +394,7 @@
       let authUser = "";
       let authPass = "";
       let fashionSourceOptions = [];
+      let fashionSourcePreviewMap = {};
 
       function setLoginStatus(message, tone) {
         loginStatusEl.textContent = message;
@@ -479,6 +480,11 @@
         fashionSourceOptions = unique;
       }
 
+      function setFashionPreviewSource(src, previewUrl) {
+        if (!src) return;
+        fashionSourcePreviewMap[src] = previewUrl || src;
+      }
+
       function setImageSourceSelectOptions(selectEl, selectedValue) {
         const currentValue = selectedValue || "";
         selectEl.innerHTML = "";
@@ -503,12 +509,26 @@
         if (!src) {
           imgEl.style.display = "none";
           imgEl.removeAttribute("src");
+          imgEl.onerror = null;
           emptyEl.style.display = "";
+          emptyEl.textContent = "No image selected";
           return;
         }
-        imgEl.src = src;
+        const previewUrl = fashionSourcePreviewMap[src] || src;
+        const fallbackUrl = previewUrl === src ? "" : src;
+        imgEl.onerror = function () {
+          if (fallbackUrl && imgEl.getAttribute("src") !== fallbackUrl) {
+            imgEl.setAttribute("src", fallbackUrl);
+            return;
+          }
+          imgEl.style.display = "none";
+          emptyEl.style.display = "";
+          emptyEl.textContent = "Preview unavailable yet";
+        };
+        imgEl.setAttribute("src", previewUrl);
         imgEl.style.display = "";
         emptyEl.style.display = "none";
+        emptyEl.textContent = "No image selected";
       }
 
       function refreshAllImageSourceSelects() {
@@ -578,7 +598,12 @@
         if (!res.ok) {
           throw new Error(result.error || "Failed to load image sources.");
         }
-        return Array.isArray(result.sources) ? result.sources : [];
+        if (Array.isArray(result.images)) {
+          return result.images;
+        }
+        return (Array.isArray(result.sources) ? result.sources : []).map(function (src) {
+          return { src: src, previewUrl: src };
+        });
       }
 
       function readFileAsBase64(file) {
@@ -646,13 +671,25 @@
             }
           });
 
-          const remoteSources = await fetchFashionImageSources();
+          const remoteImages = await fetchFashionImageSources();
+          remoteImages.forEach(function (item) {
+            if (item && item.src) {
+              setFashionPreviewSource(item.src, item.previewUrl || item.src);
+            }
+          });
           const dataSources = Array.isArray(data.fashionImages)
             ? data.fashionImages.map(function (item) {
                 return item.src;
               })
             : [];
-          ensureFashionSourceOptions(remoteSources.concat(dataSources));
+          dataSources.forEach(function (src) {
+            setFashionPreviewSource(src, src);
+          });
+          ensureFashionSourceOptions(
+            remoteImages.map(function (item) {
+              return item.src;
+            }).concat(dataSources),
+          );
 
           renderVideos(fashionListEl, data.fashionVideos || [], false, "fashion");
           renderFashionImages(data.fashionImages || []);
@@ -737,6 +774,8 @@
           }
 
           const src = result.src;
+          const localPreviewUrl = URL.createObjectURL(file);
+          setFashionPreviewSource(src, localPreviewUrl);
           ensureFashionSourceOptions([src]);
           refreshAllImageSourceSelects();
           const autoAlt = fileNameWithoutExtension(file.name).replace(/[-_]+/g, " ");
