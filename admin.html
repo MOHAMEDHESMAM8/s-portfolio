@@ -94,14 +94,14 @@
 
       #saveBtn,
       #loginBtn,
-      #addFashionVideoBtn {
+      .add-video-btn {
         background: var(--accent);
         color: #fff;
       }
 
       #reloadBtn,
       #logoutBtn,
-      .remove-fashion-video {
+      .remove-video-btn {
         background: transparent;
         color: var(--text);
         border: 1px solid var(--border);
@@ -165,12 +165,12 @@
         display: grid;
       }
 
-      .fashion-list {
+      .videos-list {
         display: grid;
         gap: 0.8rem;
       }
 
-      .fashion-item {
+      .video-item {
         display: grid;
         gap: 0.6rem;
         padding: 0.8rem;
@@ -256,26 +256,36 @@
             <p class="field-help">
               Add each fashion video with title + Google Drive preview link.
             </p>
-            <div id="fashionVideosList" class="fashion-list"></div>
+            <div id="fashionVideosList" class="videos-list"></div>
             <div class="actions">
-              <button id="addFashionVideoBtn" type="button">Add fashion video</button>
+              <button id="addFashionVideoBtn" class="add-video-btn" type="button">
+                Add fashion video
+              </button>
             </div>
           </section>
 
           <section class="tab-panel" data-panel="ugc">
-            <label>
-              UGC videos JSON (array of {title, label, previewUrl})
-              <textarea id="ugcVideosJson" required></textarea>
-              <p class="field-help">Use label for card text, title for iframe title.</p>
-            </label>
+            <p class="field-help">
+              Add UGC cards with title, label text, and Google Drive preview link.
+            </p>
+            <div id="ugcVideosList" class="videos-list"></div>
+            <div class="actions">
+              <button id="addUgcVideoBtn" class="add-video-btn" type="button">
+                Add UGC video
+              </button>
+            </div>
           </section>
 
           <section class="tab-panel" data-panel="events">
-            <label>
-              Events videos JSON (array of {title, label, previewUrl})
-              <textarea id="eventsVideosJson" required></textarea>
-              <p class="field-help">Use label for event name under the video.</p>
-            </label>
+            <p class="field-help">
+              Add event cards with title, label text, and Google Drive preview link.
+            </p>
+            <div id="eventsVideosList" class="videos-list"></div>
+            <div class="actions">
+              <button id="addEventsVideoBtn" class="add-video-btn" type="button">
+                Add event video
+              </button>
+            </div>
           </section>
 
           <div class="actions">
@@ -310,6 +320,10 @@
       const panels = Array.prototype.slice.call(document.querySelectorAll(".tab-panel"));
       const fashionListEl = document.getElementById("fashionVideosList");
       const addFashionVideoBtn = document.getElementById("addFashionVideoBtn");
+      const ugcListEl = document.getElementById("ugcVideosList");
+      const addUgcVideoBtn = document.getElementById("addUgcVideoBtn");
+      const eventsListEl = document.getElementById("eventsVideosList");
+      const addEventsVideoBtn = document.getElementById("addEventsVideoBtn");
       let authUser = "";
       let authPass = "";
 
@@ -321,24 +335,6 @@
       function setStatus(message, tone) {
         statusEl.textContent = message;
         statusEl.className = tone || "";
-      }
-
-      function stringifyJson(value) {
-        return JSON.stringify(value, null, 2);
-      }
-
-      function parseJsonField(id, fieldName) {
-        const raw = document.getElementById(id).value.trim();
-        let parsed;
-        try {
-          parsed = JSON.parse(raw);
-        } catch (err) {
-          throw new Error(fieldName + " must be valid JSON array.");
-        }
-        if (!Array.isArray(parsed) || parsed.length === 0) {
-          throw new Error(fieldName + " must be a non-empty array.");
-        }
-        return parsed;
       }
 
       function showDashboard(isLoggedIn) {
@@ -362,43 +358,59 @@
         });
       }
 
-      function createFashionVideoRow(video) {
+      function createVideoRow(video, includeLabel, typeClass) {
         const item = document.createElement("div");
-        item.className = "fashion-item";
-        item.innerHTML =
-          '<label>Video title<input type="text" class="fashion-title" required /></label>' +
-          '<label>Preview URL<input type="url" class="fashion-preview" required /></label>' +
-          '<div class="actions"><button type="button" class="remove-fashion-video">Remove</button></div>';
-        item.querySelector(".fashion-title").value = video && video.title ? video.title : "";
-        item.querySelector(".fashion-preview").value =
+        item.className = "video-item " + typeClass;
+        item.innerHTML = [
+          '<label>Video title<input type="text" class="video-title" required /></label>',
+          includeLabel
+            ? '<label>Label<input type="text" class="video-label" required /></label>'
+            : "",
+          '<label>Preview URL<input type="url" class="video-preview" required /></label>',
+          '<div class="actions"><button type="button" class="remove-video-btn">Remove</button></div>',
+        ].join("");
+
+        item.querySelector(".video-title").value = video && video.title ? video.title : "";
+        if (includeLabel) {
+          item.querySelector(".video-label").value = video && video.label ? video.label : "";
+        }
+        item.querySelector(".video-preview").value =
           video && video.previewUrl ? video.previewUrl : "";
         return item;
       }
 
-      function renderFashionVideos(videos) {
-        fashionListEl.innerHTML = "";
-        const list = Array.isArray(videos) && videos.length ? videos : [{ title: "", previewUrl: "" }];
+      function renderVideos(listEl, videos, includeLabel, typeClass) {
+        listEl.innerHTML = "";
+        const list = Array.isArray(videos) && videos.length ? videos : [{}];
         list.forEach(function (video) {
-          fashionListEl.appendChild(createFashionVideoRow(video));
+          listEl.appendChild(createVideoRow(video, includeLabel, typeClass));
         });
       }
 
-      function collectFashionVideos() {
-        const rows = Array.prototype.slice.call(
-          fashionListEl.querySelectorAll(".fashion-item"),
-        );
+      function collectVideos(listEl, includeLabel, listName) {
+        const rows = Array.prototype.slice.call(listEl.querySelectorAll(".video-item"));
         if (!rows.length) {
-          throw new Error("Add at least one fashion video.");
+          throw new Error("Add at least one " + listName + " video.");
         }
 
         return rows.map(function (row, index) {
-          const title = row.querySelector(".fashion-title").value.trim();
-          const previewUrl = row.querySelector(".fashion-preview").value.trim();
+          const title = row.querySelector(".video-title").value.trim();
+          const previewUrl = row.querySelector(".video-preview").value.trim();
+          const labelEl = row.querySelector(".video-label");
+          const label = labelEl ? labelEl.value.trim() : "";
           if (!title) {
-            throw new Error("Fashion video #" + (index + 1) + " title is required.");
+            throw new Error(listName + " video #" + (index + 1) + " title is required.");
+          }
+          if (includeLabel && !label) {
+            throw new Error(listName + " video #" + (index + 1) + " label is required.");
           }
           if (!previewUrl) {
-            throw new Error("Fashion video #" + (index + 1) + " preview URL is required.");
+            throw new Error(
+              listName + " video #" + (index + 1) + " preview URL is required.",
+            );
+          }
+          if (includeLabel) {
+            return { title: title, label: label, previewUrl: previewUrl };
           }
           return { title: title, previewUrl: previewUrl };
         });
@@ -417,13 +429,9 @@
             }
           });
 
-          renderFashionVideos(data.fashionVideos || []);
-          document.getElementById("ugcVideosJson").value = stringifyJson(
-            data.ugcVideos || [],
-          );
-          document.getElementById("eventsVideosJson").value = stringifyJson(
-            data.eventsVideos || [],
-          );
+          renderVideos(fashionListEl, data.fashionVideos || [], false, "fashion");
+          renderVideos(ugcListEl, data.ugcVideos || [], true, "ugc");
+          renderVideos(eventsListEl, data.eventsVideos || [], true, "events");
           setStatus("Loaded.", "ok");
         } catch (err) {
           setStatus(err.message || "Failed to load links.", "err");
@@ -437,13 +445,21 @@
       });
 
       addFashionVideoBtn.addEventListener("click", function () {
-        fashionListEl.appendChild(createFashionVideoRow({ title: "", previewUrl: "" }));
+        fashionListEl.appendChild(createVideoRow({}, false, "fashion"));
       });
 
-      fashionListEl.addEventListener("click", function (event) {
-        const removeBtn = event.target.closest(".remove-fashion-video");
+      addUgcVideoBtn.addEventListener("click", function () {
+        ugcListEl.appendChild(createVideoRow({}, true, "ugc"));
+      });
+
+      addEventsVideoBtn.addEventListener("click", function () {
+        eventsListEl.appendChild(createVideoRow({}, true, "events"));
+      });
+
+      formEl.addEventListener("click", function (event) {
+        const removeBtn = event.target.closest(".remove-video-btn");
         if (!removeBtn) return;
-        const row = removeBtn.closest(".fashion-item");
+        const row = removeBtn.closest(".video-item");
         if (row) row.remove();
       });
 
@@ -498,9 +514,9 @@
         });
 
         try {
-          payload.fashionVideos = collectFashionVideos();
-          payload.ugcVideos = parseJsonField("ugcVideosJson", "UGC videos JSON");
-          payload.eventsVideos = parseJsonField("eventsVideosJson", "Events videos JSON");
+          payload.fashionVideos = collectVideos(fashionListEl, false, "Fashion");
+          payload.ugcVideos = collectVideos(ugcListEl, true, "UGC");
+          payload.eventsVideos = collectVideos(eventsListEl, true, "Events");
         } catch (err) {
           setStatus(err.message, "err");
           return;
