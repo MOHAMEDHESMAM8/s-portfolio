@@ -1624,6 +1624,7 @@
             <div class="contact-links" aria-label="Get in touch">
               <a
                 href="https://www.instagram.com/sara_media_coverage"
+                data-link-href="instagramUrl"
                 target="_blank"
                 rel="noopener"
                 class="contact-link"
@@ -1640,11 +1641,12 @@
                   <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
                   <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
                 </svg>
-                @sara_media_coverage
+                <span data-link-text="instagramHandle">@sara_media_coverage</span>
               </a>
               <div class="contact-row">
                 <a
                   href="https://wa.me/201157126764"
+                  data-link-href="whatsappUrl"
                   target="_blank"
                   rel="noopener"
                   class="contact-link"
@@ -1661,7 +1663,7 @@
                       d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"
                     />
                   </svg>
-                  +20 11 57126764
+                  <span data-link-text="phoneDisplay">+20 11 57126764</span>
                 </a>
               </div>
             </div>
@@ -1879,6 +1881,7 @@
         <div class="gallery-cta fade-up">
           <a
             href="https://drive.google.com/drive/folders/1WxM95s49GfO3aALE9_6VWDm2B3clqbYn"
+            data-link-href="fashionGalleryUrl"
             target="_blank"
             rel="noopener"
             class="btn btn-outline"
@@ -1988,6 +1991,7 @@
         <div class="gallery-cta fade-up">
           <a
             href="https://drive.google.com/drive/folders/1L-MdGOpGmkX5IC449KHPkMzMFqExhJYV"
+            data-link-href="ugcGalleryUrl"
             target="_blank"
             rel="noopener"
             class="btn btn-outline"
@@ -2079,6 +2083,7 @@
         <div class="gallery-cta fade-up">
           <a
             href="https://drive.google.com/drive/folders/1OEu1Sf8IX1WD_kE4YRzdkmFqebMy-sDl"
+            data-link-href="eventsGalleryUrl"
             target="_blank"
             rel="noopener"
             class="btn btn-outline"
@@ -2119,6 +2124,7 @@
           <div class="contact-links fade-up">
             <a
               href="https://www.instagram.com/sara_media_coverage"
+              data-link-href="instagramUrl"
               target="_blank"
               rel="noopener"
               class="contact-link"
@@ -2135,11 +2141,12 @@
                 <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
                 <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
               </svg>
-              @sara_media_coverage
+              <span data-link-text="instagramHandle">@sara_media_coverage</span>
             </a>
             <div class="contact-row">
               <a
                 href="https://wa.me/201157126764"
+                data-link-href="whatsappUrl"
                 target="_blank"
                 rel="noopener"
                 class="contact-link"
@@ -2156,12 +2163,13 @@
                     d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"
                   />
                 </svg>
-                +20 11 57126764
+                <span data-link-text="phoneDisplay">+20 11 57126764</span>
               </a>
               <button
                 type="button"
                 class="contact-copy-btn"
                 data-copy="+201157126764"
+                data-link-copy="phoneRaw"
                 aria-label="Copy phone number to clipboard"
               >
                 Copy number
@@ -2182,8 +2190,10 @@
       <div class="footer-ig">
         <a
           href="https://www.instagram.com/sara_media_coverage"
+          data-link-href="instagramUrl"
           target="_blank"
           rel="noopener"
+          data-link-text="instagramHandle"
           >@sara_media_coverage</a
         >
       </div>
@@ -2316,6 +2326,40 @@
     </nav>
 
     <script>
+      // Load external links from JSON so they can be managed outside this file.
+      (function () {
+        fetch("data/links.json", { cache: "no-store" })
+          .then(function (res) {
+            if (!res.ok) throw new Error("links file unavailable");
+            return res.json();
+          })
+          .then(function (links) {
+            document.querySelectorAll("[data-link-href]").forEach(function (el) {
+              var key = el.getAttribute("data-link-href");
+              if (key && typeof links[key] === "string" && links[key]) {
+                el.setAttribute("href", links[key]);
+              }
+            });
+
+            document.querySelectorAll("[data-link-text]").forEach(function (el) {
+              var key = el.getAttribute("data-link-text");
+              if (key && typeof links[key] === "string" && links[key]) {
+                el.textContent = links[key];
+              }
+            });
+
+            document.querySelectorAll("[data-link-copy]").forEach(function (el) {
+              var key = el.getAttribute("data-link-copy");
+              if (key && typeof links[key] === "string" && links[key]) {
+                el.setAttribute("data-copy", links[key]);
+              }
+            });
+          })
+          .catch(function () {
+            // Keep hardcoded fallback links when JSON cannot be loaded.
+          });
+      })();
+
       // Defer Google Drive embeds until near viewport (cuts initial requests and heavy iframe work)
       (function () {
         var nodes = document.querySelectorAll("iframe.drive-embed[data-src]");
