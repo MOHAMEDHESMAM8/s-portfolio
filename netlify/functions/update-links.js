@@ -47,6 +47,21 @@ function assertVideoList(value, name, includeLabel) {
   });
 }
 
+function assertImageList(value, name) {
+  if (!Array.isArray(value) || value.length === 0) {
+    throw new Error(`Invalid field: ${name} must be a non-empty array`);
+  }
+  return value.map(function (item, index) {
+    if (!item || typeof item !== "object") {
+      throw new Error(`Invalid field: ${name}[${index}] must be an object`);
+    }
+    return {
+      src: assertString(item.src, `${name}[${index}].src`),
+      alt: assertString(item.alt, `${name}[${index}].alt`),
+    };
+  });
+}
+
 exports.handler = async function handler(event) {
   if (event.httpMethod !== "POST") {
     return jsonResponse(405, { error: "Method not allowed" });
@@ -78,6 +93,7 @@ exports.handler = async function handler(event) {
       ugcGalleryUrl: assertString(payload.ugcGalleryUrl, "ugcGalleryUrl"),
       eventsGalleryUrl: assertString(payload.eventsGalleryUrl, "eventsGalleryUrl"),
       fashionVideos: assertVideoList(payload.fashionVideos, "fashionVideos", false),
+      fashionImages: assertImageList(payload.fashionImages, "fashionImages"),
       ugcVideos: assertVideoList(payload.ugcVideos, "ugcVideos", true),
       eventsVideos: assertVideoList(payload.eventsVideos, "eventsVideos", true),
     };

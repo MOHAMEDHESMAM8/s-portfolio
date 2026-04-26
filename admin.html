@@ -60,6 +60,7 @@
       }
 
       input,
+      select,
       textarea {
         width: 100%;
         border: 1px solid var(--border);
@@ -178,6 +179,13 @@
         border-radius: 8px;
         background: #121722;
       }
+
+      .upload-box {
+        padding: 0.8rem;
+        border: 1px dashed var(--border);
+        border-radius: 8px;
+        background: #10141b;
+      }
     </style>
   </head>
   <body>
@@ -262,6 +270,27 @@
                 Add fashion video
               </button>
             </div>
+            <div class="upload-box">
+              <label>
+                Upload new fashion image to GitHub
+                <input id="fashionImageFile" type="file" accept="image/*" />
+              </label>
+              <div class="actions">
+                <button id="uploadFashionImageBtn" class="add-video-btn" type="button">
+                  Upload image
+                </button>
+              </div>
+              <div id="fashionUploadStatus" class="field-help" aria-live="polite"></div>
+            </div>
+            <p class="field-help">
+              Fashion images: choose source from uploaded files + add alt text.
+            </p>
+            <div id="fashionImagesList" class="videos-list"></div>
+            <div class="actions">
+              <button id="addFashionImageBtn" class="add-video-btn" type="button">
+                Add fashion image
+              </button>
+            </div>
           </section>
 
           <section class="tab-panel" data-panel="ugc">
@@ -320,12 +349,18 @@
       const panels = Array.prototype.slice.call(document.querySelectorAll(".tab-panel"));
       const fashionListEl = document.getElementById("fashionVideosList");
       const addFashionVideoBtn = document.getElementById("addFashionVideoBtn");
+      const fashionImagesListEl = document.getElementById("fashionImagesList");
+      const addFashionImageBtn = document.getElementById("addFashionImageBtn");
+      const fashionImageFileEl = document.getElementById("fashionImageFile");
+      const uploadFashionImageBtn = document.getElementById("uploadFashionImageBtn");
+      const fashionUploadStatusEl = document.getElementById("fashionUploadStatus");
       const ugcListEl = document.getElementById("ugcVideosList");
       const addUgcVideoBtn = document.getElementById("addUgcVideoBtn");
       const eventsListEl = document.getElementById("eventsVideosList");
       const addEventsVideoBtn = document.getElementById("addEventsVideoBtn");
       let authUser = "";
       let authPass = "";
+      let fashionSourceOptions = [];
 
       function setLoginStatus(message, tone) {
         loginStatusEl.textContent = message;
@@ -335,6 +370,11 @@
       function setStatus(message, tone) {
         statusEl.textContent = message;
         statusEl.className = tone || "";
+      }
+
+      function setUploadStatus(message, tone) {
+        fashionUploadStatusEl.textContent = message;
+        fashionUploadStatusEl.className = "field-help " + (tone || "");
       }
 
       function showDashboard(isLoggedIn) {
@@ -377,6 +417,130 @@
         item.querySelector(".video-preview").value =
           video && video.previewUrl ? video.previewUrl : "";
         return item;
+      }
+
+      function toSafeFileName(name) {
+        return String(name || "")
+          .toLowerCase()
+          .replace(/[^a-z0-9._-]/g, "-")
+          .replace(/-+/g, "-")
+          .replace(/^-|-$/g, "");
+      }
+
+      function fileNameWithoutExtension(fileName) {
+        return String(fileName || "").replace(/\.[^.]+$/, "");
+      }
+
+      function ensureFashionSourceOptions(values) {
+        const all = fashionSourceOptions.concat(values || []);
+        const unique = Array.from(
+          new Set(
+            all.filter(function (x) {
+              return typeof x === "string" && x.trim();
+            }),
+          ),
+        );
+        unique.sort(function (a, b) {
+          return a.localeCompare(b);
+        });
+        fashionSourceOptions = unique;
+      }
+
+      function setImageSourceSelectOptions(selectEl, selectedValue) {
+        const currentValue = selectedValue || "";
+        selectEl.innerHTML = "";
+        const placeholder = document.createElement("option");
+        placeholder.value = "";
+        placeholder.textContent = "Select image source";
+        selectEl.appendChild(placeholder);
+        fashionSourceOptions.forEach(function (src) {
+          const option = document.createElement("option");
+          option.value = src;
+          option.textContent = src;
+          selectEl.appendChild(option);
+        });
+        selectEl.value = currentValue;
+      }
+
+      function refreshAllImageSourceSelects() {
+        const selects = fashionImagesListEl.querySelectorAll(".fashion-image-src");
+        selects.forEach(function (selectEl) {
+          const selected = selectEl.value;
+          setImageSourceSelectOptions(selectEl, selected);
+        });
+      }
+
+      function createFashionImageRow(image) {
+        const item = document.createElement("div");
+        item.className = "video-item fashion-image-item";
+        item.innerHTML = [
+          '<label>Image source<select class="fashion-image-src" required></select></label>',
+          '<label>Alt text<input type="text" class="fashion-image-alt" required /></label>',
+          '<div class="actions"><button type="button" class="remove-image-btn remove-video-btn">Remove</button></div>',
+        ].join("");
+        const selectEl = item.querySelector(".fashion-image-src");
+        const altEl = item.querySelector(".fashion-image-alt");
+        setImageSourceSelectOptions(selectEl, image && image.src ? image.src : "");
+        altEl.value = image && image.alt ? image.alt : "";
+        return item;
+      }
+
+      function renderFashionImages(images) {
+        fashionImagesListEl.innerHTML = "";
+        const list = Array.isArray(images) && images.length ? images : [{}];
+        list.forEach(function (image) {
+          fashionImagesListEl.appendChild(createFashionImageRow(image));
+        });
+      }
+
+      function collectFashionImages() {
+        const rows = Array.prototype.slice.call(
+          fashionImagesListEl.querySelectorAll(".fashion-image-item"),
+        );
+        if (!rows.length) {
+          throw new Error("Add at least one fashion image.");
+        }
+        return rows.map(function (row, index) {
+          const src = row.querySelector(".fashion-image-src").value.trim();
+          const alt = row.querySelector(".fashion-image-alt").value.trim();
+          if (!src) {
+            throw new Error("Fashion image #" + (index + 1) + " source is required.");
+          }
+          if (!alt) {
+            throw new Error("Fashion image #" + (index + 1) + " alt text is required.");
+          }
+          return { src: src, alt: alt };
+        });
+      }
+
+      async function fetchFashionImageSources() {
+        const res = await fetch("/.netlify/functions/list-fashion-images", {
+          method: "GET",
+          headers: {
+            "x-admin-user": authUser,
+            "x-admin-pass": authPass,
+          },
+        });
+        const result = await res.json();
+        if (!res.ok) {
+          throw new Error(result.error || "Failed to load image sources.");
+        }
+        return Array.isArray(result.sources) ? result.sources : [];
+      }
+
+      function readFileAsBase64(file) {
+        return new Promise(function (resolve, reject) {
+          const reader = new FileReader();
+          reader.onload = function () {
+            const full = String(reader.result || "");
+            const parts = full.split(",");
+            resolve(parts[1] || "");
+          };
+          reader.onerror = function () {
+            reject(new Error("Failed to read file."));
+          };
+          reader.readAsDataURL(file);
+        });
       }
 
       function renderVideos(listEl, videos, includeLabel, typeClass) {
@@ -429,9 +593,19 @@
             }
           });
 
+          const remoteSources = await fetchFashionImageSources();
+          const dataSources = Array.isArray(data.fashionImages)
+            ? data.fashionImages.map(function (item) {
+                return item.src;
+              })
+            : [];
+          ensureFashionSourceOptions(remoteSources.concat(dataSources));
+
           renderVideos(fashionListEl, data.fashionVideos || [], false, "fashion");
+          renderFashionImages(data.fashionImages || []);
           renderVideos(ugcListEl, data.ugcVideos || [], true, "ugc");
           renderVideos(eventsListEl, data.eventsVideos || [], true, "events");
+          setUploadStatus("");
           setStatus("Loaded.", "ok");
         } catch (err) {
           setStatus(err.message || "Failed to load links.", "err");
@@ -448,6 +622,10 @@
         fashionListEl.appendChild(createVideoRow({}, false, "fashion"));
       });
 
+      addFashionImageBtn.addEventListener("click", function () {
+        fashionImagesListEl.appendChild(createFashionImageRow({}));
+      });
+
       addUgcVideoBtn.addEventListener("click", function () {
         ugcListEl.appendChild(createVideoRow({}, true, "ugc"));
       });
@@ -461,6 +639,58 @@
         if (!removeBtn) return;
         const row = removeBtn.closest(".video-item");
         if (row) row.remove();
+      });
+
+      uploadFashionImageBtn.addEventListener("click", async function () {
+        if (!authUser || !authPass) {
+          setUploadStatus("Login required first.", "err");
+          return;
+        }
+        const file = fashionImageFileEl.files && fashionImageFileEl.files[0];
+        if (!file) {
+          setUploadStatus("Choose an image first.", "err");
+          return;
+        }
+        setUploadStatus("Uploading image...");
+        try {
+          const extMatch = file.name.toLowerCase().match(/\.[a-z0-9]+$/);
+          const ext = extMatch ? extMatch[0] : ".webp";
+          const baseName = toSafeFileName(fileNameWithoutExtension(file.name)) || "fashion-image";
+          const fileName = Date.now() + "-" + baseName + ext;
+          const base64Data = await readFileAsBase64(file);
+
+          const res = await fetch("/.netlify/functions/upload-fashion-image", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-admin-user": authUser,
+              "x-admin-pass": authPass,
+            },
+            body: JSON.stringify({
+              fileName: fileName,
+              base64Data: base64Data,
+            }),
+          });
+          const result = await res.json();
+          if (!res.ok) {
+            throw new Error(result.error || "Upload failed.");
+          }
+
+          const src = result.src;
+          ensureFashionSourceOptions([src]);
+          refreshAllImageSourceSelects();
+          const autoAlt = fileNameWithoutExtension(file.name).replace(/[-_]+/g, " ");
+          fashionImagesListEl.appendChild(
+            createFashionImageRow({
+              src: src,
+              alt: autoAlt,
+            }),
+          );
+          fashionImageFileEl.value = "";
+          setUploadStatus("Uploaded: " + src, "ok");
+        } catch (err) {
+          setUploadStatus(err.message || "Upload failed.", "err");
+        }
       });
 
       loginFormEl.addEventListener("submit", async function (event) {
@@ -515,6 +745,7 @@
 
         try {
           payload.fashionVideos = collectVideos(fashionListEl, false, "Fashion");
+          payload.fashionImages = collectFashionImages();
           payload.ugcVideos = collectVideos(ugcListEl, true, "UGC");
           payload.eventsVideos = collectVideos(eventsListEl, true, "Events");
         } catch (err) {

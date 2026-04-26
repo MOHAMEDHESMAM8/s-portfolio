@@ -2385,7 +2385,57 @@
                   iframe.setAttribute("data-src", video.previewUrl);
                   iframe.setAttribute("src", video.previewUrl);
                 }
-                grid.insertBefore(item, firstNonVideoItem);
+                if (firstNonVideoItem) grid.insertBefore(item, firstNonVideoItem);
+                else grid.appendChild(item);
+              });
+            }
+
+            function applyFashionImages(images) {
+              if (!Array.isArray(images)) return;
+              var grid = document.getElementById("photoGrid");
+              if (!grid) return;
+              var firstImageItem = grid.querySelector(".photo-item:not(.video-item)");
+              if (!firstImageItem) return;
+              var templateButton = firstImageItem.cloneNode(true);
+              var existingImageItems = Array.prototype.slice.call(
+                grid.querySelectorAll(".photo-item:not(.video-item)"),
+              );
+
+              existingImageItems.forEach(function (item) {
+                item.remove();
+              });
+
+              photos = [];
+              photoAlts = [];
+
+              images.forEach(function (image, index) {
+                if (!image || typeof image.src !== "string" || !image.src) return;
+                var alt =
+                  typeof image.alt === "string" && image.alt
+                    ? image.alt
+                    : "Fashion photo " + (index + 1);
+                photos.push(image.src);
+                photoAlts.push(alt);
+
+                var btn = templateButton.cloneNode(true);
+                btn.classList.remove("fade-up");
+                btn.classList.add("visible");
+                btn.setAttribute("data-lightbox-index", String(index));
+                btn.setAttribute(
+                  "aria-label",
+                  "Open fashion photo " + (index + 1) + " in fullscreen viewer",
+                );
+
+                var img = btn.querySelector("img");
+                if (img) {
+                  img.setAttribute("src", image.src);
+                  img.setAttribute("alt", alt);
+                  img.setAttribute("loading", "lazy");
+                  img.setAttribute("decoding", "async");
+                  img.setAttribute("fetchpriority", "low");
+                }
+
+                grid.appendChild(btn);
               });
             }
 
@@ -2452,6 +2502,7 @@
             }
 
             applyFashionVideos(links.fashionVideos);
+            applyFashionImages(links.fashionImages);
             applyUgcVideos(links.ugcVideos);
             applyEventVideos(links.eventsVideos);
           })
@@ -2582,7 +2633,7 @@
       fadeEls.forEach((el) => observer.observe(el));
 
       // Lightbox (dialog semantics, focus restore, inert backdrop, dynamic alt)
-      const photos = [
+      let photos = [
         "fashion/IMG_1971.webp",
         "fashion/IMG_1982.webp",
         "fashion/IMG_1995.webp",
@@ -2593,7 +2644,7 @@
         "fashion/IMG_2388.webp",
         "fashion/IMG_2336.webp",
       ];
-      const photoAlts = [
+      let photoAlts = [
         "Editorial portrait: warm side light and tailored styling",
         "Full-length look on a clean studio floor, strong posture",
         "High-contrast editorial with bold color and shape",
@@ -2627,6 +2678,7 @@
       }
 
       function openLightbox(idx) {
+        if (!photos.length) return;
         lastFocusBeforeLightbox = document.activeElement;
         currentPhoto = idx;
         applyLightboxImage();

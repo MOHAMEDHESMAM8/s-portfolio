@@ -21,6 +21,44 @@
       "previewUrl": "https://drive.google.com/file/d/1F3sRSINLX6lj2S7TzHMQ5BO4umQFZwmx/preview"
     }
   ],
+  "fashionImages": [
+    {
+      "src": "fashion/IMG_1971.webp",
+      "alt": "Editorial portrait: warm side light and tailored styling"
+    },
+    {
+      "src": "fashion/IMG_1982.webp",
+      "alt": "Full-length look on a clean studio floor, strong posture"
+    },
+    {
+      "src": "fashion/IMG_1995.webp",
+      "alt": "High-contrast editorial with bold color and shape"
+    },
+    {
+      "src": "fashion/IMG_2047.webp",
+      "alt": "Minimal set: strong silhouette on a neutral backdrop"
+    },
+    {
+      "src": "fashion/IMG_2085.webp",
+      "alt": "Campaign-style hero frame with dramatic rim light"
+    },
+    {
+      "src": "fashion/IMG_2221.webp",
+      "alt": "Detail study: fabric texture, styling, and tone"
+    },
+    {
+      "src": "fashion/IMG_2315.webp",
+      "alt": "Natural daylight fashion frame, outdoor or window light"
+    },
+    {
+      "src": "fashion/IMG_2388.webp",
+      "alt": "Magazine-style composition with asymmetrical framing"
+    },
+    {
+      "src": "fashion/IMG_2336.webp",
+      "alt": "Portrait: soft expression, calm balance, shallow depth"
+    }
+  ],
   "ugcVideos": [
     {
       "title": "UGC brand video",
