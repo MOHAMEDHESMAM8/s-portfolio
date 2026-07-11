@@ -587,7 +587,7 @@
       }
 
       async function fetchFashionImageSources() {
-        const res = await fetch("/.netlify/functions/list-fashion-images", {
+        const res = await fetch("/api/list-fashion-images", {
           method: "GET",
           headers: {
             "x-admin-user": authUser,
@@ -756,7 +756,7 @@
           const fileName = Date.now() + "-" + baseName + ext;
           const base64Data = await readFileAsBase64(file);
 
-          const res = await fetch("/.netlify/functions/upload-fashion-image", {
+          const res = await fetch("/api/upload-fashion-image", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -799,7 +799,7 @@
 
         setLoginStatus("Checking login...");
         try {
-          const res = await fetch("/.netlify/functions/admin-login", {
+          const res = await fetch("/api/admin-login", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -854,7 +854,7 @@
 
         setStatus("Saving...");
         try {
-          const res = await fetch("/.netlify/functions/update-links", {
+          const res = await fetch("/api/update-links", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
